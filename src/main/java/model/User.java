@@ -1,39 +1,36 @@
 package model;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import lombok.*;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /**
- *
+ * User Entity
  */
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 @Entity
 @Table(name = "users")
-public class User{
+public class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     * Name of users.
-     */
-    @Column(name = "username")
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "password")
-    private String password;
+    @Column(name = "username")
+    private String username;
 
     @Column(name = "email", unique = true)
     private String email;
 
-    @Column(name = "addresse")
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "address")
     private String address;
 
     @Column(name = "enabled")
@@ -44,5 +41,4 @@ public class User{
 
     @Column(name = "token_date")
     private LocalDateTime tokenDate;
-
 }
