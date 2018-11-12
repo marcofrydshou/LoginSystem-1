@@ -16,7 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import lombok.extern.slf4j.Slf4j;
 
-import demo.Services.CustomUserDetailService;
+import demo.service.impl.CustomUserDetailService;
 
 import static demo.Security.SecurityConstants.H2_URLS;
 import static demo.Security.SecurityConstants.SIGN_UP_URLS;

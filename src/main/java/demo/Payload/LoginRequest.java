@@ -8,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 
  */
 
+
 public class LoginRequest {
 
 	@NotBlank(message = "username cannot be blank")

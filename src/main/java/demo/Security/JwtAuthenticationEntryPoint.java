@@ -9,10 +9,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
 import com.google.gson.Gson;
 
-import demo.exceptions.InvalidLoginResponse;
+import demo.exception.InvalidLoginResponse;
+import demo.exception.InvalidLoginResponse;
 
 /*
 commence laver et Json object, der bruges til error handling ved forkerte crendentials

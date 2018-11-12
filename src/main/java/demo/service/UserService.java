@@ -1,6 +1,7 @@
 package demo.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import demo.exception.BusinessException;
 import demo.model.User;
@@ -17,4 +18,6 @@ public interface UserService  {
 	List<User> getAllUsers() throws BusinessException;
 
 	User getUserByUsername(String name) throws BusinessException;
+
+	User getOne(Long Id);
 }

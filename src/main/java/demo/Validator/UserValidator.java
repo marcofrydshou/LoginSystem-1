@@ -4,13 +4,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import demo.Model.User;
+import demo.model.User;
+import demo.model.User;
 
 /*
 UserValidator udpeger hvilken entity klasse der bruges til validering i metode supports
 Implementerer Validator interface security spring
 validate metoden bruges til at validere password og confirm password og kriterier hertil
 UserValidator bruges i RestController i register medtoden */
+
 
 @Component
 public class UserValidator implements Validator {

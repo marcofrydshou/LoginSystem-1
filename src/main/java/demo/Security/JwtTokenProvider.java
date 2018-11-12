@@ -3,12 +3,11 @@ package demo.Security;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import io.jsonwebtoken.*;
 import org.springframework.security.core.Authentication;
-
-import demo.Model.User;
 import org.springframework.stereotype.Component;
+import io.jsonwebtoken.*;
+
+import demo.model.User;
 
 import static demo.Security.SecurityConstants.EXPIRATION_TIME;
 import static demo.Security.SecurityConstants.SECRET;

@@ -13,8 +13,10 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import demo.Model.User;
-import demo.Services.CustomUserDetailService;
+import demo.model.User;
+import demo.service.impl.CustomUserDetailService;
+import demo.model.User;
+import demo.service.impl.CustomUserDetailService;
 
 import static demo.Security.SecurityConstants.HEADER_STRING;
 import static demo.Security.SecurityConstants.TOKEN_PREFIX;

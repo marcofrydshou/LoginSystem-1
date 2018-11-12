@@ -1,4 +1,4 @@
-package demo.exceptions;
+package demo.exception;
 
 /*
 Exception klasse med generiske harcodede invalid messages
