@@ -23,6 +23,11 @@ public class UserController {
 	@Autowired
 	public UserController( UserService userService){ this.userService = userService; }
 
+	@GetMapping("/")
+	public String hello(){
+		return "hello world";
+	}
+
 	@GetMapping("/users")
 	public List<User> findEnabledUsers() throws BusinessException {
 		return userService.findEnabledUsers();

@@ -5,6 +5,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
 /**
@@ -46,13 +49,26 @@ public class User {
 
     @Column(name = "token_date")
     private LocalDateTime tokenDate;
-/*
+
+    @ManyToMany
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "id"))
+    private Collection<Role> roles;
+
     @Transient
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public void hashPassword(){
         this.password = encoder.encode(this.password);
-    }*/
+    }
 /*
     public User(String username, String password, boolean enabled, String email) {
         this.username = username;

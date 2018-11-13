@@ -1,8 +1,8 @@
 package demo.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import java.util.Collection;
+
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,9 +11,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Table(name = "role")
+@Entity
+@Table(name = "roles")
 public class Role {
 
-	@Column(name = "authority")
-	private String authority;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	private String name;
+
+	@ManyToMany(mappedBy = "roles")
+	private Collection<User> users;
+
 }

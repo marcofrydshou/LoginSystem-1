@@ -32,11 +32,15 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findUserByEnabledIsTrue();
 	}
 
+	@Override public User findUserById(Long userId) {
+		return null;
+	}
+
 	@Override
 	public
 	void createNewUser(User newUser) throws DataIntegrityViolationException {
 		try{
-//			newUser.hashPassword();
+			newUser.hashPassword();
 			userRepository.save(newUser);
 			log.info("Create new user: "+ newUser);
 		}
@@ -90,7 +94,6 @@ public class UserServiceImpl implements UserService {
 			log.debug(e.getMessage(),e);
 			throw new DataIntegrityViolationException(username);
 		}
-
 	}
 
 	@Override

@@ -16,11 +16,19 @@ public interface UserService  {
 	 */
 	List<User> findEnabledUsers();
 
+	/**
+	 * Finds a user by their ID
+	 *
+	 * @param userId The ID of the user
+	 * @return User that the ID belongs to
+	 */
+	User findUserById(Long userId);
+
 	void createNewUser(User user) throws DataIntegrityViolationException;
 
 	void updateUser(Long userId, User user) throws DataIntegrityViolationException;
 
-	void deleteUser(Long userId) throws  DataIntegrityViolationException;
+	void deleteUser(Long userId);
 
 
 	/**
@@ -39,5 +47,10 @@ public interface UserService  {
 	 */
 	User findByEmail(String email) throws  DataIntegrityViolationException;
 
+	/**
+	 * Updates a User's password, hashing the plaintext password before setting it.
+	 * @param user The User to update the password for
+	 * @param password The plantext password to hash and save for the User
+	 */
 	void updatePassword(User user, String password);
 }
