@@ -17,7 +17,9 @@ public interface UserService  {
 	 */
 	List<User> getAllUsers() throws BusinessException;
 
-	User getUserByUsername(String name) throws BusinessException;
+	User getUserByUsername(String username) throws BusinessException;
 
 	User getOne(Long Id);
+
+	User saveUser(User user);
 }

@@ -100,6 +100,6 @@ public class User implements UserDetails {
      * @return <code>true</code> if the user is enabled, <code>false</code> otherwise
      */
     @Override public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

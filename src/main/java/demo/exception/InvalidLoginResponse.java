@@ -10,21 +10,21 @@ Burges i JWTAuthenticationEntryPoint og laves til et json object der bruges i Se
 public class InvalidLoginResponse extends Throwable {
 
 	//JSON oobject der reutrnere
-	private String userName;
+	private String username;
 	private String password;
 
 
 	public InvalidLoginResponse() {
-		this.userName = "Invalid username";
+		this.username = "Invalid username";
 		this.password = "Invalid password";
 	}
 
 	public String getUsername() {
-		return userName;
+		return username;
 	}
 
-	public void setUsername(String userName) {
-		this.userName = userName;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {

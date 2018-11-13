@@ -12,18 +12,18 @@ import javax.validation.constraints.NotBlank;
 public class LoginRequest {
 
 	@NotBlank(message = "username cannot be blank")
-	private String userName;
+	private String username;
 
 	@NotBlank(message = "password cannot be blank")
 	private String password;
 
 
 	public String getUserName() {
-		return userName;
+		return username;
 	}
 
 	public void setUserName(String userName) {
-		this.userName = userName;
+		this.username = username;
 	}
 
 	public String getPassword() {

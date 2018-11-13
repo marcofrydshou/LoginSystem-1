@@ -2,6 +2,7 @@ package demo.repository;
 
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -32,7 +33,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	/**
 	 * Returns a reference to the entity with the given identifier.
 	 *
-	 * @param aLong must not be {@literal null}.
+	 * @param Id must not be {@literal null}.
 	 * @return a reference to the entity with the given identifier.
 	 * @throws EntityNotFoundException if no entity exists for given {@code id}.
 	 * @see EntityManager#getReference(Class, Object)

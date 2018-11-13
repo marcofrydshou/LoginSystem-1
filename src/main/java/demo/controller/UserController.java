@@ -75,7 +75,7 @@ public class UserController {
 
 
 
-	@RequestMapping("/getAllUsers")
+	@RequestMapping("/user/getAllUsers")
 	public List<User> getAllUsers() throws BusinessException {
 		return userService.getAllUsers();
 	}
