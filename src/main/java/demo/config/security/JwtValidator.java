@@ -1,10 +1,5 @@
 package demo.config.security;
 
-
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -13,7 +8,6 @@ import io.jsonwebtoken.UnsupportedJwtException;
 
 import lombok.extern.slf4j.Slf4j;
 
-import demo.model.Role;
 import demo.model.User;
 
 /**
@@ -30,25 +24,19 @@ public class JwtValidator {
 		// Jwts gonna parser Jwt message
 		// custom secret
 		// if the user dont have Claims can throw an exception
-		User user = null;
+		User user = new User();;
 		try {
 			Claims body = Jwts.parser()
 					.setSigningKey(secret)
-					.parseClaimsJwt(token)
+					.parseClaimsJws(token)
 					.getBody();
 
-			user = new User();
-
-			user.setId(Long.parseLong((String) body.get("userId")));
-			user.setUsername(body.getSubject());
-			List<Role> roles = new ArrayList<>();
-			Role role = new Role();
-			role.setAuthority((String)body.get("role"));
-			roles.add(role);
-			user.setAuthoritites(roles);
+			Long userId =  Long.parseLong((String)body.get("userId"));
+			String userName = (String)body.get("sub");
+			user.setId(userId);
+			user.setUsername(userName);
 		}
 		catch (Exception e){
-			log.debug("Can't find Claims from the token" + e);
 			throw new UnsupportedJwtException("JWT Token is missing");
 		}
 		return user;

@@ -44,15 +44,15 @@ public class UserController {
 			throw new BusinessException("Users with given username not exists");
 		}
 	}
-//
-//	@GetMapping("/user/email/{email}")
-//	public User find(@NotBlank @PathVariable(value = "email") String email) throws BusinessException {
-//		try{
-//			return userService.findByEmail(email);
-//		}catch (Exception e){
-//			throw new BusinessException("Users with given email not exists");
-//		}
-//	}
+
+	@GetMapping("/user/email/{email}")
+	public User find(@NotBlank @PathVariable(value = "email") String email) throws BusinessException {
+		try{
+			return userService.findByEmail(email);
+		}catch (Exception e){
+			throw new BusinessException("Users with given email not exists");
+		}
+	}
 /*
 	@PostMapping(value = "/user/create")
 	public boolean create(@RequestBody UserConfigurationForm newUserForm) throws BusinessException {

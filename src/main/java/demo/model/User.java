@@ -28,11 +28,9 @@ public class User {
     @Column(name = "name")
     private String name;
 
-    @NotNull
     @Column(name = "username")
     private String username;
 
-    @NotNull
     @Column(name = "email", unique = true)
     private String email;
 
@@ -86,4 +84,8 @@ public class User {
         this.password = password;
         this.enabled = enabled;
     }*/
+    public User(long id, String username) {
+        this.id = id;
+        this.username = username;
+    }
 }

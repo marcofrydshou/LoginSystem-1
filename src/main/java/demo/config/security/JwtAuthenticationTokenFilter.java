@@ -31,14 +31,14 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
 	public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
 
 		// from httpServletRequest can get header infomations
-		String header = httpServletRequest.getHeader("Authorisation");
+		String header = httpServletRequest.getHeader("Authorization");
 
-		if( header == null || !header.startsWith("Token ") ){
+		if( header == null || !header.startsWith("bearer ") ){
 			throw new RuntimeException("JTW Token is missing");
 		}
 
 		// get the token from the header
-		String authenticationToken = header.substring(6);
+		String authenticationToken = header.substring(7);
 
 		// need to send back
 		JwtAuthenticationToken token = new JwtAuthenticationToken(authenticationToken);
