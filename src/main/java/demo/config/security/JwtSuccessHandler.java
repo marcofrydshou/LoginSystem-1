@@ -16,6 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtSuccessHandler implements AuthenticationSuccessHandler {
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-		log.info("Successfully Authentication");
+		System.out.println("Successfully Authentication");
 	}
 }

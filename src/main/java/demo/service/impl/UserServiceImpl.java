@@ -7,7 +7,6 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +39,7 @@ public class UserServiceImpl implements UserService {
 	public
 	void createNewUser(User newUser) throws DataIntegrityViolationException {
 		try{
-			newUser.hashPassword();
+//			newUser.hashPassword();
 			userRepository.save(newUser);
 			log.info("Create new user: "+ newUser);
 		}

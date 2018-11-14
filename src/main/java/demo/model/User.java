@@ -5,10 +5,11 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
+import java.util.List;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 
 /**
  * User Entity
@@ -22,7 +23,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @Column(name = "name")
     private String name;
@@ -50,25 +51,28 @@ public class User {
     @Column(name = "token_date")
     private LocalDateTime tokenDate;
 
-    @ManyToMany
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn(
-                    name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "role_id", referencedColumnName = "id"))
-    private Collection<Role> roles;
+    @ElementCollection
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private List<Role> authoritites;
 
-    @Transient
-    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
-    public void setPassword(String password) {
-        this.password = password;
+    public User(long id, @NotNull String username, List<Role> authoritites) {
+        this.id = id;
+        this.username = username;
+        this.authoritites = authoritites;
     }
 
-    public void hashPassword(){
-        this.password = encoder.encode(this.password);
-    }
+//    @Transient
+//    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+//
+//    public void setPassword(String password) {
+//        this.password = password;
+//    }
+//
+//    public void hashPassword(){
+//        this.password = encoder.encode(this.password);
+//    }
 /*
     public User(String username, String password, boolean enabled, String email) {
         this.username = username;

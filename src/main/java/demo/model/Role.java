@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import javax.persistence.*;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,11 +18,9 @@ public class Role {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private long id;
 
-	private String name;
-
-	@ManyToMany(mappedBy = "roles")
-	private Collection<User> users;
+	@Column(name="authority")
+	private String authority;
 
 }

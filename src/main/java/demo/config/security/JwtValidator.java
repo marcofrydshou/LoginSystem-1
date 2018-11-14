@@ -1,14 +1,15 @@
 package demo.config.security;
 
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.UnsupportedJwtException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,16 +41,15 @@ public class JwtValidator {
 
 			user.setId(Long.parseLong((String) body.get("userId")));
 			user.setUsername(body.getSubject());
-			Collection<Role> roles = null;
+			List<Role> roles = new ArrayList<>();
 			Role role = new Role();
+			role.setAuthority((String)body.get("role"));
 			roles.add(role);
-			role.setName((String) body.get("role"));
-
-			user.setRoles(roles);
+			user.setAuthoritites(roles);
 		}
 		catch (Exception e){
 			log.debug("Can't find Claims from the token" + e);
-			throw e;
+			throw new UnsupportedJwtException("JWT Token is missing");
 		}
 		return user;
 	}

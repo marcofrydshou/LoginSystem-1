@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
 @Configuration
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private static final String INTERNAL_PATH = "/internal/**";
 	private static final String API_PATH = "/api/**";
@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public JwtAuthenticationTokenFilter authenticationsTokenFilter () {
 		JwtAuthenticationTokenFilter filter = new JwtAuthenticationTokenFilter();
 		filter.setAuthenticationManager(authenticationManager());
-		//filter.setAuthenticationSuccessHandler(new JwtSuccessHandler());
+		filter.setAuthenticationSuccessHandler(new JwtSuccessHandler());
 		return filter;
 	}
 
@@ -54,6 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 
 		// disable the cross-site request
+		// http.antMatchers states that this HttpSecurity will only be aplicate to URLSs that start with /rest/
 		http.csrf().disable()
 				.authorizeRequests().antMatchers("**/rest/**").authenticated()
 				.and()

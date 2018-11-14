@@ -27,7 +27,7 @@ import demo.model.User;
 public class JwtAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
 
 	@Autowired
-	JwtValidator validator;
+	private JwtValidator validator;
 
 	@Override
 	protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) throws AuthenticationException {
@@ -36,17 +36,14 @@ public class JwtAuthenticationProvider extends AbstractUserDetailsAuthentication
 
 	@Override
 	protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) throws AuthenticationException {
-		log.debug("USERNAMEPASSWORDAUTHENTICATIONTOKEN ->" + usernamePasswordAuthenticationToken);
 		// convert UsernamePasswordAuthenticationToken into Our JwtAuthenticationToken
 		JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) usernamePasswordAuthenticationToken;
 
 		// get token
 		String token = jwtAuthenticationToken.getToken();
-		log.debug("TOKEN ->" + jwtAuthenticationToken.getToken());
 
 		// validating the token and decode the user identify
 		User user = validator.validate(token);
-		log.debug("VALIDATE USER FROM TOKEN ->" + user);
 
 		if(user == null){
 			throw new RuntimeException("JWT Token is incorrect");
@@ -54,9 +51,9 @@ public class JwtAuthenticationProvider extends AbstractUserDetailsAuthentication
 
 		// create grants
 		List<GrantedAuthority> grantedAuthorities = AuthorityUtils
-				.commaSeparatedStringToAuthorityList(user.getRoles().toString());
-			log.debug("GRANTEAUTHORITIES ->" + grantedAuthorities);
-		return new JwtUserDetails(user.getId(),user.getUsername(), token, grantedAuthorities);
+				.commaSeparatedStringToAuthorityList(user.getAuthoritites().get(0).toString());
+		return new JwtUserDetails(user.getId(),user.getUsername(),
+				token, grantedAuthorities);
 	}
 
 	@Override

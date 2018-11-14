@@ -23,7 +23,7 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
 
 	//pass all incoming URL's, to be hit for every URL which is having slash star star
 	public JwtAuthenticationTokenFilter() {
-		super("**/rest/**");
+		super("/rest/**");
 	}
 
 	//the method authorize our requests, where we handling our request and the validating, where token will be used
@@ -33,15 +33,12 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
 		// from httpServletRequest can get header infomations
 		String header = httpServletRequest.getHeader("Authorisation");
 
-		log.debug("HEADER -> " +header);
-		if( header == null || !header.startsWith("Token") ){
+		if( header == null || !header.startsWith("Token ") ){
 			throw new RuntimeException("JTW Token is missing");
-
 		}
 
 		// get the token from the header
 		String authenticationToken = header.substring(6);
-		log.debug("AUTHENTICATIONTOKEN FROM HEADER -> " +header);
 
 		// need to send back
 		JwtAuthenticationToken token = new JwtAuthenticationToken(authenticationToken);

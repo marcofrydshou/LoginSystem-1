@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,18 +29,30 @@ public class UserController {
 
 	@GetMapping("/users")
 	public List<User> findEnabledUsers() throws BusinessException {
-		return userService.findEnabledUsers();
+		try{
+			return userService.findEnabledUsers();
+		}catch (Exception e){
+			throw new BusinessException("Users not exists");
+		}
 	}
 
 	@GetMapping("/user/name/{username}")
 	public User findByUsername(@NotBlank @PathVariable(value = "username") String username) throws BusinessException {
-		return userService.findByUsername(username);
+		try{
+			return userService.findByUsername(username);
+		}catch (Exception e){
+			throw new BusinessException("Users with given username not exists");
+		}
 	}
-
-	@GetMapping("/user/email/{email}")
-	public User find(@NotBlank @PathVariable(value = "email") String email) throws BusinessException {
-		return userService.findByEmail(email);
-	}
+//
+//	@GetMapping("/user/email/{email}")
+//	public User find(@NotBlank @PathVariable(value = "email") String email) throws BusinessException {
+//		try{
+//			return userService.findByEmail(email);
+//		}catch (Exception e){
+//			throw new BusinessException("Users with given email not exists");
+//		}
+//	}
 /*
 	@PostMapping(value = "/user/create")
 	public boolean create(@RequestBody UserConfigurationForm newUserForm) throws BusinessException {
