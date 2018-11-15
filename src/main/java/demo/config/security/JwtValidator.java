@@ -1,5 +1,7 @@
 package demo.config.security;
 
+import java.util.Date;
+
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -17,7 +19,7 @@ import demo.model.User;
 @Component
 public class JwtValidator {
 
-	private String secret = "test";
+	private String secretKey = "test";
 
 	public User validate(String token) {
 
@@ -27,14 +29,18 @@ public class JwtValidator {
 		User user = new User();;
 		try {
 			Claims body = Jwts.parser()
-					.setSigningKey(secret)
+					.setSigningKey(secretKey)
 					.parseClaimsJws(token)
 					.getBody();
 
-			Long userId =  Long.parseLong((String)body.get("userId"));
-			String userName = (String)body.get("sub");
-			user.setId(userId);
-			user.setUsername(userName);
+			String username = body.getSubject();
+			Long userId = (Long)body.get("userId");
+			String email = body.get("email").toString();
+			Date exp = body.getExpiration();
+//			Object email = body.get("email");
+//			user.setId(id);
+			user.setUsername(username);
+			user.setEmail(email);
 		}
 		catch (Exception e){
 			throw new UnsupportedJwtException("JWT Token is missing");

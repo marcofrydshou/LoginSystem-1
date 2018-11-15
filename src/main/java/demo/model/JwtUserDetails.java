@@ -22,6 +22,7 @@ public class JwtUserDetails implements UserDetails {
 	// @Data annotation create setters and getters from private variables
 	private Long id;
 	private String username;
+	private String email;
 	private String token;
 	private Collection<? extends GrantedAuthority> authorities;
 

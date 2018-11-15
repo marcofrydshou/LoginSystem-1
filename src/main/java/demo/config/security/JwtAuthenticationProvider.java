@@ -52,7 +52,7 @@ public class JwtAuthenticationProvider extends AbstractUserDetailsAuthentication
 		// create grants
 		List<GrantedAuthority> grantedAuthorities = AuthorityUtils
 				.commaSeparatedStringToAuthorityList(user.getAuthoritites().get(0).toString());
-		return new JwtUserDetails(user.getId(),user.getUsername(),
+		return new JwtUserDetails(user.getId(),user.getUsername(),user.getEmail(),
 				token, grantedAuthorities);
 	}
 
