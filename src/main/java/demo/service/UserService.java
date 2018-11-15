@@ -22,4 +22,6 @@ public interface UserService  {
 	User getOne(Long Id);
 
 	User saveUser(User user);
+
+	void createNewUser(User user);
 }

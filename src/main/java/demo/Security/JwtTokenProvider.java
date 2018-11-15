@@ -1,5 +1,6 @@
-package demo.Security;
+package demo.security;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,10 +8,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.*;
 
+import demo.model.Role;
 import demo.model.User;
 
-import static demo.Security.SecurityConstants.EXPIRATION_TIME;
-import static demo.Security.SecurityConstants.SECRET;
+
+
 
 /*
 Tokenprovider der generer token med dependeny io.jsonwebtoken
@@ -22,10 +24,12 @@ validere token til  user
 @Component
 public class JwtTokenProvider {
 
-
+    public static final String SECRET = "SecretKeyToGenJWTs";
+    public static final long EXPIRATION_TIME = 30000_000;
     //generate token
-    public String generateToken(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+
+
+    public String generateToken(User user) {
 
         Date now = new Date(System.currentTimeMillis());
 
@@ -33,21 +37,16 @@ public class JwtTokenProvider {
         Date expire = new Date(now.getTime() + EXPIRATION_TIME);
 
         //Vores token lager nogle fields fra user
-        String userId = Long.toString(user.getId());
-
+       // String userId = Long.toString(user.getId());
 
         //claims fra user til token
-        Map<String, Object> jwtClaims = new HashMap<>();
-        jwtClaims.put("id", (Long.toString(user.getId())));
-        jwtClaims.put("username", user.getUsername());
-        jwtClaims.put("name", user.getName());
-
-
+        Claims claims = Jwts.claims().setSubject(user.getUsername());
+        claims.put("id", user.getId().toString());
+        claims.put("role", user.getRoles());
 
         //token builder
         return Jwts.builder()
-                .setSubject(userId)
-                .setClaims(jwtClaims)
+                .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(expire)
                 .signWith(SignatureAlgorithm.HS512, SECRET)
@@ -59,10 +58,26 @@ public class JwtTokenProvider {
     //validate token
 
 
-    public boolean validateToken(String token){
+    public User validateToken(String token){
+
+        User user = null;
         try {
-            Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token);
-            return true;
+            Claims claims  = Jwts.parser().setSigningKey(SECRET)
+                    .parseClaimsJws(token)
+                    .getBody();
+
+
+           user = new User();
+           user.setId(Long.parseLong((String)claims.get("id" )));
+           user.setUsername(claims.getSubject());
+            Collection<Role> roller = null;
+            Role role = new Role();
+            role.setName((String) claims.get("role"));
+            roller.add(role);
+            user.setRoles(roller);
+
+
+
         }catch (SignatureException ex){
             System.out.println("Invalid jwt signature");
         }catch (MalformedJwtException ex){
@@ -74,7 +89,7 @@ public class JwtTokenProvider {
         }catch (IllegalArgumentException ex){
             System.out.println("jwt claims is empty");
         }
-        return false;
+        return  user;
     }
 
 

@@ -7,6 +7,7 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * User Entity
@@ -14,9 +15,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+public class User  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,66 +42,23 @@ public class User implements UserDetails {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "enabled")
+    private boolean enabled;
 
+    @Column(name = "token")
+    private String token;
 
+    @Column(name = "token_date")
+    private LocalDateTime tokenDate;
 
+    @ManyToMany(targetEntity = User.class, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "id"))
 
+    private Collection<Role> roles;
 
-    //Userdetails interface methods
-    /**
-     * Returns the authorities granted to the user. Cannot return <code>null</code>.
-     *
-     * @return the authorities, sorted by natural key (never <code>null</code>)
-     */
-
-    //Jsonignore for http reposnse doesnt expose auth in eks postman
-    @JsonIgnore
-    @Override public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
-
-    /**
-     * Indicates whether the user's account has expired. An expired account cannot be
-     * authenticated.
-     *
-     * @return <code>true</code> if the user's account is valid (ie non-expired),
-     * <code>false</code> if no longer valid (ie expired)
-     */
-    @JsonIgnore
-    @Override public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    /**
-     * Indicates whether the user is locked or unlocked. A locked user cannot be
-     * authenticated.
-     *
-     * @return <code>true</code> if the user is not locked, <code>false</code> otherwise
-     */
-    @JsonIgnore
-    @Override public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    /**
-     * Indicates whether the user's credentials (password) has expired. Expired
-     * credentials prevent authentication.
-     *
-     * @return <code>true</code> if the user's credentials are valid (ie non-expired),
-     * <code>false</code> if no longer valid (ie expired)
-     */
-    @JsonIgnore
-    @Override public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    /**
-     * Indicates whether the user is enabled or disabled. A disabled user cannot be
-     * authenticated.
-     *
-     * @return <code>true</code> if the user is enabled, <code>false</code> otherwise
-     */
-    @Override public boolean isEnabled() {
-        return true;
-    }
 }

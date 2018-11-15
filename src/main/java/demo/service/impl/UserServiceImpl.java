@@ -29,6 +29,8 @@ public class UserServiceImpl implements UserService {
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 	}
 
+
+
 	public User saveUser(User user){
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		user.setUsername(user.getUsername());
@@ -36,6 +38,16 @@ public class UserServiceImpl implements UserService {
 		//set confirm paasword to empty, sp postman doesntshow in plaintxt
 		user.setConfirmpassword("");
 		return userRepository.save(user);
+	}
+
+
+	@Override
+	public void createNewUser(User user) {
+
+			user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+			userRepository.save(user);
+
+
 	}
 
 

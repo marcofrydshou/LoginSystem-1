@@ -16,17 +16,17 @@ import org.springframework.web.bind.annotation.*;
 
 import demo.Payload.JWTLoginSuccessResponse;
 import demo.Payload.LoginRequest;
-import demo.Security.JwtTokenProvider;
+import demo.security.JwtTokenProvider;
 import demo.Validator.UserValidator;
 import demo.exception.BusinessException;
 import demo.model.User;
 import demo.service.UserService;
 import demo.service.impl.UserServiceImpl;
 
-import static demo.Security.SecurityConstants.TOKEN_PREFIX;
+import static demo.security.SecurityConstants.TOKEN_PREFIX;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/rest")
 public class UserController {
 
 	private UserService userService;
@@ -48,15 +48,16 @@ public class UserController {
 		this.authenticationManager = authenticationManager;
 	}
 
-	@PostMapping("/user/register")
+	@PostMapping("/register")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody User user, BindingResult result) {
 		//TODO: validate password
-		userValidator.validate(user, result);
 
 		User user1 = userServiceImpl.saveUser(user);
 		return new ResponseEntity<User>(user1, HttpStatus.CREATED);
 	}
 
+
+	/*
 
 	@PostMapping("/user/login")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest){
@@ -72,15 +73,15 @@ public class UserController {
 		return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwt));
 	}
 
+*/
 
 
-
-	@RequestMapping("/user/getAllUsers")
+	@RequestMapping("/all")
 	public List<User> getAllUsers() throws BusinessException {
 		return userService.getAllUsers();
 	}
 
-	@RequestMapping("/getUserByName")
+	@RequestMapping("/getusername")
 	public User getUserByName(@NotBlank @RequestParam(value = "name") String name) throws BusinessException {
 		return userService.getUserByUsername(name);
 	}
