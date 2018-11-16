@@ -33,7 +33,7 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
 		// from httpServletRequest can get header infomations
 		String header = httpServletRequest.getHeader("Authorization");
 
-		if( header == null || !header.startsWith("bearer ") ){
+		if( header == null || !header.startsWith("Bearer ") ){
 			throw new RuntimeException("JTW Token is missing");
 		}
 

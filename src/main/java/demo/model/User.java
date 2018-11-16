@@ -43,9 +43,6 @@ public class User {
     @Column(name = "enabled")
     private boolean enabled;
 
-    @Column(name = "token")
-    private String token;
-
     @Column(name = "token_date")
     private LocalDateTime tokenDate;
 
@@ -55,6 +52,13 @@ public class User {
     @JoinColumn(name = "user_id")
     private List<Role> authoritites;
 
+    public boolean hasAuthority(String authorityName){
+        return (authoritites.stream().anyMatch(auth -> auth.getAuthority().toLowerCase().equals(authorityName.toLowerCase())));
+    }
+
+    public void addAuthority(Role role){
+        this.authoritites.add(role);
+    }
 
 //    @Transient
 //    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();

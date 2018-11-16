@@ -131,9 +131,13 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(password);
 //		user.hashPassword();
 
-		user.setToken(null);
 		user.setTokenDate(null);
 
+		userRepository.save(user);
+	}
+
+	@Override
+	public void save(User user) {
 		userRepository.save(user);
 	}
 }

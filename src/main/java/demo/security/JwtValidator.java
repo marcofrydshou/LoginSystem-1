@@ -39,13 +39,17 @@ public class JwtValidator {
 					.parseClaimsJws(token)
 					.getBody();
 
-			String userName = body.getIssuer();
+			long userId = Long.parseLong((String)body.get("userId"));
+			String userName = body.getSubject();
 			Date currentTime = body.getIssuedAt();
 			Date exp = body.getExpiration();
-			long userId = Long.parseLong((String)body.get("userId"));
 
+			// check if the userId exists in our db
 			user = userService.findUserById((userId));
-			user.setTokenDate(currentTime.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+			if(user != null && userName.equals(user.getName())){
+				user.setTokenDate(exp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+				userService.save(user);
+			}
 		}
 		catch (Exception e){
 			throw new UnsupportedJwtException("JWT Token is missing"+ e);

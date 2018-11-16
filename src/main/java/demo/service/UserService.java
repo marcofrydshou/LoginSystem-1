@@ -54,4 +54,10 @@ public interface UserService  {
 	 * @param password The plantext password to hash and save for the User
 	 */
 	void updatePassword(User user, String password);
+
+	/**
+	 * Save the user with new informations
+	 * @param user
+	 */
+	void save(User user);
 }

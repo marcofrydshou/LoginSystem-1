@@ -19,9 +19,10 @@ public class JwtGenerator {
 
 		Date expTime =  new GregorianCalendar(2018, Calendar.DECEMBER,25,5,0).getTime();
 
-		// iss means who the token belongs to
+		// issuer means who is the issuer, subject means the token belongs to
 		Claims claims = Jwts.claims()
-				.setIssuer(user.getName())
+				.setIssuer("LoginSystem")
+				.setSubject(user.getName())
 				.setIssuedAt(new Date())
 				.setExpiration(expTime);
 		claims.put("userId",String.valueOf(user.getId()));
