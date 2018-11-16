@@ -15,6 +15,13 @@ import demo.model.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
 	/**
+	 *
+	 * @param userId
+	 * @return
+	 */
+	Optional<User> findByIdAndEnabledIsTrue(long userId);
+
+	/**
 	 * Find all enabled users
 	 * @return a list of exists users
 	 */

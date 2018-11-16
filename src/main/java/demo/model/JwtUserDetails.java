@@ -20,7 +20,7 @@ public class JwtUserDetails implements UserDetails {
 
 	// AllArgsConstructor annotation create constructor from private variables
 	// @Data annotation create setters and getters from private variables
-	private Long id;
+	private long id;
 	private String username;
 	private String email;
 	private String token;

@@ -2,7 +2,7 @@ package demo.controller;
 
 import org.springframework.web.bind.annotation.*;
 
-import demo.config.security.JwtGenerator;
+import demo.security.JwtGenerator;
 import demo.model.User;
 
 @RestController
@@ -17,7 +17,6 @@ public class TokenController {
 
 	@PostMapping
 	public String generate(@RequestBody final User user){
-
 		return jwtGenerator.generate(user);
 	}
 }

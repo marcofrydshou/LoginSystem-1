@@ -55,11 +55,6 @@ public class User {
     @JoinColumn(name = "user_id")
     private List<Role> authoritites;
 
-    public User(long id, @NotNull String username, List<Role> authoritites) {
-        this.id = id;
-        this.username = username;
-        this.authoritites = authoritites;
-    }
 
 //    @Transient
 //    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -71,21 +66,9 @@ public class User {
 //    public void hashPassword(){
 //        this.password = encoder.encode(this.password);
 //    }
-/*
-    public User(String username, String password, boolean enabled, String email) {
-        this.username = username;
-        this.password = password;
-        this.enabled = enabled;
-        this.email = email;
-    }
 
-    public User(String username, String password, boolean enabled) {
-        this.username = username;
-        this.password = password;
-        this.enabled = enabled;
-    }*/
-    public User(long id, String username) {
+    public User(long id, String name) {
         this.id = id;
-        this.username = username;
+        this.name = name;
     }
 }

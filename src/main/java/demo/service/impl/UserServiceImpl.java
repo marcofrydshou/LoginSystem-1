@@ -23,7 +23,9 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
 
 	@Autowired
-	public UserServiceImpl(UserRepository userRepository) { this.userRepository = userRepository; }
+	public UserServiceImpl(UserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
 
 	@Override
 	public List<User> findEnabledUsers() {
@@ -31,8 +33,20 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findUserByEnabledIsTrue();
 	}
 
-	@Override public User findUserById(Long userId) {
-		return null;
+	@Override
+	public User findUserById(Long userId) {
+		User user = new User();
+		try{
+			Optional<User> optionalUser = userRepository.findByIdAndEnabledIsTrue(userId);
+			if(optionalUser.isPresent()){
+				user = optionalUser.get();
+			}
+		}
+		catch (DataIntegrityViolationException e){
+			log.debug("Error accourced from findUserById {userId} " + userId);
+			e.printStackTrace();
+		}
+		return user;
 	}
 
 	@Override

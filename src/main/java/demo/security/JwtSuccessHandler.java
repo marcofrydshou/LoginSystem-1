@@ -1,4 +1,4 @@
-package demo.config.security;
+package demo.security;
 
 
 import java.io.IOException;

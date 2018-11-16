@@ -1,4 +1,4 @@
-package demo.config.security;
+package demo.config;
 
 import java.util.Collections;
 
@@ -15,6 +15,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import lombok.extern.slf4j.Slf4j;
+
+import demo.security.JwtAuthenticationEntryPoint;
+import demo.security.JwtAuthenticationProvider;
+import demo.security.JwtAuthenticationTokenFilter;
+import demo.security.JwtSuccessHandler;
 
 @Slf4j
 @EnableGlobalMethodSecurity(prePostEnabled = true)

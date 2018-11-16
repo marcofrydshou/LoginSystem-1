@@ -1,6 +1,8 @@
-package demo.config.security;
+package demo.security;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.springframework.stereotype.Component;
 
@@ -15,12 +17,14 @@ public class JwtGenerator {
 
 	public String generate(User user) {
 
+		Date expTime =  new GregorianCalendar(2018, Calendar.DECEMBER,25,5,0).getTime();
+
+		// iss means who the token belongs to
 		Claims claims = Jwts.claims()
-				.setSubject(user.getUsername());
-		claims.put("userId", user.getId());
-		claims.put("email",user.getEmail());
-		claims.put("role", user.getAuthoritites());
-		claims.put("exp", (new Date().getTime()+60*60*1000)/1000); // 1 hour from now:
+				.setIssuer(user.getName())
+				.setIssuedAt(new Date())
+				.setExpiration(expTime);
+		claims.put("userId",String.valueOf(user.getId()));
 		return Jwts.builder()
 				.setClaims(claims)
 				.signWith(SignatureAlgorithm.HS512, "test")

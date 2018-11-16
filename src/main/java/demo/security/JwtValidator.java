@@ -1,7 +1,9 @@
-package demo.config.security;
+package demo.security;
 
+import java.time.ZoneId;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -11,6 +13,7 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.extern.slf4j.Slf4j;
 
 import demo.model.User;
+import demo.service.UserService;
 
 /**
  * Used jsonwebtoken library to create some claims
@@ -20,6 +23,9 @@ import demo.model.User;
 public class JwtValidator {
 
 	private String secretKey = "test";
+
+	@Autowired
+	private UserService userService;
 
 	public User validate(String token) {
 
@@ -33,17 +39,16 @@ public class JwtValidator {
 					.parseClaimsJws(token)
 					.getBody();
 
-			String username = body.getSubject();
-			Long userId = (Long)body.get("userId");
-			String email = body.get("email").toString();
+			String userName = body.getIssuer();
+			Date currentTime = body.getIssuedAt();
 			Date exp = body.getExpiration();
-//			Object email = body.get("email");
-//			user.setId(id);
-			user.setUsername(username);
-			user.setEmail(email);
+			long userId = Long.parseLong((String)body.get("userId"));
+
+			user = userService.findUserById((userId));
+			user.setTokenDate(currentTime.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
 		}
 		catch (Exception e){
-			throw new UnsupportedJwtException("JWT Token is missing");
+			throw new UnsupportedJwtException("JWT Token is missing"+ e);
 		}
 		return user;
 	}
