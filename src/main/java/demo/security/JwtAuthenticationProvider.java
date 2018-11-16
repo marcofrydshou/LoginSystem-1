@@ -33,17 +33,17 @@ JwtTokenProvider jwtTokenProvider;
 
 
 	@Override protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
-		log.debug("USERNAMEPASSWORDAUTHENTICATIONTOKEN ->" + authentication);
+
 		// convert UsernamePasswordAuthenticationToken into Our JwtAuthenticationToken
 		JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) authentication;
 
 		// get token
 		String token = jwtAuthenticationToken.getToken();
-		log.debug("TOKEN ->" + jwtAuthenticationToken.getToken());
+
 
 		// validating the token and decode the user identify
 		User user = jwtTokenProvider.validateToken(token);
-		log.debug("VALIDATE USER FROM TOKEN ->" + user);
+
 
 		if(user == null){
 			throw new RuntimeException("JWT Token is incorrect");
@@ -52,12 +52,13 @@ JwtTokenProvider jwtTokenProvider;
 		// create grants
 		List<GrantedAuthority> grantedAuthorities = AuthorityUtils
 				.commaSeparatedStringToAuthorityList(user.getRoles().toString());
-		log.debug("GRANTEAUTHORITIES ->" + grantedAuthorities);
+
 		return new JwtUserDetails(user.getId(), user.getUsername(), token, grantedAuthorities);
 	}
 
 	@Override
 	public boolean supports(Class<?> aClass) {
+
 		return (JwtAuthenticationToken.class.isAssignableFrom(aClass));
 	}
 }

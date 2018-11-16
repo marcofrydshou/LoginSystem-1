@@ -5,14 +5,21 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import lombok.extern.slf4j.Slf4j;
+
+import demo.service.impl.UserServiceImpl;
 
 
 @Slf4j
 public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessingFilter {
+
+
+
 
 	//pass all incoming URL's, to be hit for every URL which is having slash star star
 	public JwtAuthenticationTokenFilter() {
@@ -20,28 +27,34 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
 	}
 
 	//the method authorize our requests, where we handling our request and the validating, where token will be used
+
+
+
+	private String getToken(HttpServletRequest request){
+		// from httpServletRequest can get header infomations
+		String header = request.getHeader("AUTH_HEADER");
+		if( header != null && header.startsWith("Bearer ") ){
+			return header.substring(7);
+		}
+		return null;
+	}
+
+
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
 
-		// from httpServletRequest can get header infomations
-		String header = httpServletRequest.getHeader("Authorisation");
+		String authToken = getToken(httpServletRequest);
+		if(authToken != null){
 
-		log.debug("HEADER -> " +header);
-		if( header == null || !header.startsWith("Token") ){
-			throw new RuntimeException("JTW Token is missing");
+			// need to send back
+			JwtAuthenticationToken token = new JwtAuthenticationToken(authToken);
 
+			// get authenticationManager from extends library
+			// then authenticating it
+			return getAuthenticationManager().authenticate(token);
 		}
 
-		// get the token from the header
-		String authenticationToken = header.substring(6);
-		log.debug("AUTHENTICATIONTOKEN FROM HEADER -> " +header);
-
-		// need to send back
-		JwtAuthenticationToken token = new JwtAuthenticationToken(authenticationToken);
-
-		// get authenticationManager from extends library
-		// then authenticating it
-		return getAuthenticationManager().authenticate(token);
+return  null;
 	}
 
 	@Override

@@ -2,6 +2,8 @@ package demo.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import demo.Payload.JWTLoginSuccessResponse;
 import demo.Payload.LoginRequest;
+import demo.security.JwtAuthenticationTokenFilter;
 import demo.security.JwtTokenProvider;
 import demo.Validator.UserValidator;
 import demo.exception.BusinessException;
@@ -23,7 +26,6 @@ import demo.model.User;
 import demo.service.UserService;
 import demo.service.impl.UserServiceImpl;
 
-import static demo.security.SecurityConstants.TOKEN_PREFIX;
 
 @RestController
 @RequestMapping("/rest")
@@ -38,6 +40,8 @@ public class UserController {
 	private JwtTokenProvider jwtTokenProvider;
 
 	private AuthenticationManager authenticationManager;
+
+	private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
 
 	@Autowired
 	public UserController( UserService userService, UserServiceImpl userServiceImpl, UserValidator userValidator, JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager){
@@ -57,10 +61,20 @@ public class UserController {
 	}
 
 
-	/*
+	@PostMapping("token")
+	public String generate(@RequestBody final User user){
+		return jwtTokenProvider.generateToken(user);
+
+	}
+
+
+/*
 
 	@PostMapping("/user/login")
-	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest){
+	public ResponseEntity<?> authenticateUser(@Valid @RequestBody HttpServletRequest req, HttpServletResponse res){
+
+
+
 
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(

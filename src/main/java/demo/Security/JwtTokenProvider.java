@@ -1,15 +1,18 @@
 package demo.security;
 
+import java.time.ZoneId;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.*;
 
 import demo.model.Role;
 import demo.model.User;
+import demo.service.UserService;
 
 
 
@@ -25,8 +28,13 @@ validere token til  user
 public class JwtTokenProvider {
 
     public static final String SECRET = "SecretKeyToGenJWTs";
-    public static final long EXPIRATION_TIME = 30000_000;
+    public static final long EXPIRATION_TIME = 3000_000;
     //generate token
+
+
+    @Autowired
+    private UserService userService;
+
 
 
     public String generateToken(User user) {
@@ -68,13 +76,15 @@ public class JwtTokenProvider {
 
 
            user = new User();
-           user.setId(Long.parseLong((String)claims.get("id" )));
-           user.setUsername(claims.getSubject());
-            Collection<Role> roller = null;
-            Role role = new Role();
-            role.setName((String) claims.get("role"));
-            roller.add(role);
-            user.setRoles(roller);
+           String username = claims.getIssuer();
+           Date time = claims.getIssuedAt();
+           Date exp = claims.getExpiration();
+
+           long id = Long.parseLong((String)claims.get("id"));
+
+
+            user = userService.getOne(id);
+            user.setTokenDate(time.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
 
 
 

@@ -15,6 +15,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import demo.Payload.JWTLoginSuccessResponse;
 import demo.Security.JwtAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import lombok.extern.slf4j.Slf4j;
@@ -55,6 +57,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private JwtAuthenticationProvider jwtAuthenticationProvider;
 
+	JWTLoginSuccessResponse jwtLoginSuccessResponse;
+
+	private JwtAuthenticationToken jwtAuthenticationToken;
+
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -82,7 +88,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		JwtAuthenticationTokenFilter filter = new JwtAuthenticationTokenFilter();
 
 		filter.setAuthenticationManager(authenticationManager());
-		//filter.setAuthenticationSuccessHandler(new JwtSuccessHandler());
+		filter.setAuthenticationSuccessHandler(new JWTLoginSuccessResponse());
 		return filter;
 	}
 

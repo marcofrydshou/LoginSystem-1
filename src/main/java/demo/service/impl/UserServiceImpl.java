@@ -3,6 +3,7 @@ package demo.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.OneToOne;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import demo.exception.BusinessException;
 import demo.model.User;
 import demo.repository.UserRepository;
+import demo.resetmail.PasswordResetToken;
 import demo.service.UserService;
 
 @Service
@@ -71,6 +73,13 @@ public class UserServiceImpl implements UserService {
 
 	@Override public User getOne(Long Id) {
 		User user = userRepository.getOne(Id);
+		return user;
+	}
+
+
+	@Override
+	public User findUserByEmail(String email){
+		User user = userRepository.findByEmail(email);
 		return user;
 	}
 

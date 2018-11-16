@@ -24,4 +24,7 @@ public interface UserService  {
 	User saveUser(User user);
 
 	void createNewUser(User user);
+
+	User findUserByEmail(String email);
+	
 }
