@@ -9,24 +9,33 @@
 			"name": "User",
 			"item": [
 				{
-					"name": "Get all users",
+					"name": "Find all users",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJMb2dpblN5c3RlbSIsInN1YiI6InRlc3QgdXNlcjEiLCJpYXQiOjE1NDIzNzQxMTUsImV4cCI6MTU0NTcxMDQwMCwidXNlcklkIjoiMTAwIn0.1Wtf0tzR51u4N1v0WL-fWHqkqlZG8BcFJ-XkqsrGzjmlOCnNZwT0W9LK6GPfVWAmFOFW4u1BNZgiM5je1cwDPQ",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8888/api/getAllUsers",
+							"raw": "http://localhost:8888/rest/users",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8888",
 							"path": [
-								"api",
-								"getAllUsers"
+								"rest",
+								"users"
 							]
 						},
 						"description": "Get all users"
@@ -34,30 +43,111 @@
 					"response": []
 				},
 				{
-					"name": "Get user by name",
+					"name": "Find user with given username",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJMb2dpblN5c3RlbSIsInN1YiI6InRlc3QgdXNlcjEiLCJpYXQiOjE1NDIzNzQxMTUsImV4cCI6MTU0NTcxMDQwMCwidXNlcklkIjoiMTAwIn0.1Wtf0tzR51u4N1v0WL-fWHqkqlZG8BcFJ-XkqsrGzjmlOCnNZwT0W9LK6GPfVWAmFOFW4u1BNZgiM5je1cwDPQ",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8888/api/getUserByName?name=test",
+							"raw": "http://localhost:8888/rest/user/name/test",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8888",
 							"path": [
-								"api",
-								"getUserByName"
+								"rest",
+								"user",
+								"name",
+								"test"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find user with given email",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJMb2dpblN5c3RlbSIsInN1YiI6InRlc3QgdXNlcjEiLCJpYXQiOjE1NDIzNzQxMTUsImV4cCI6MTU0NTcxMDQwMCwidXNlcklkIjoiMTAwIn0.1Wtf0tzR51u4N1v0WL-fWHqkqlZG8BcFJ-XkqsrGzjmlOCnNZwT0W9LK6GPfVWAmFOFW4u1BNZgiM5je1cwDPQ",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8888/rest/user/email/test1@test.dk",
+							"protocol": "http",
+							"host": [
+								"localhost"
 							],
-							"query": [
-								{
-									"key": "name",
-									"value": "test"
-								}
+							"port": "8888",
+							"path": [
+								"rest",
+								"user",
+								"email",
+								"test1@test.dk"
+							]
+						},
+						"description": "Find user with given email"
+					},
+					"response": []
+				},
+				{
+					"name": "Generator JWT",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"name": "Content-Type",
+								"value": "Token  eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ4dSIsInVzZXJJZCI6IjEwMCJ9.MetVc_Rjg1UEVdw3ue7bbcpRHz0eEF9KLJj0_LEYxwJyy5GyWc5HTHbxm11Ms9EKOgxPfm2utwgZl-31YfESjw\n",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\":100,\n\t\"name\": \"test user1\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8888/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"token"
 							]
 						}
 					},
