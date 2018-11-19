@@ -19,7 +19,7 @@ public class EmailService {
 
 
 	public void sendEmail(Mail mail){
-		
+
 
 
 	}
