@@ -1,9 +1,9 @@
 package demo.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import demo.exception.DataIntegrityViolationException;
+import demo.exception.NoRolesFoundException;
 import demo.model.User;
 
 /**
@@ -11,21 +11,14 @@ import demo.model.User;
  */
 public interface UserService  {
 
+	User findUserById(long id);
 	/**
 	 * Find all enabled users
 	 * @return A list of enabled users
 	 */
 	List<User> findEnabledUsers();
 
-	/**
-	 * Finds a user by their ID
-	 *
-	 * @param userId The ID of the user
-	 * @return User that the ID belongs to
-	 */
-	User findUserById(Long userId);
-
-	void createNewUser(User user) throws DataIntegrityViolationException;
+	User createNewUser(String username, String password, String email, boolean enabled, List<String> roles) throws NoRolesFoundException;
 
 	void updateUser(Long userId, User user) throws DataIntegrityViolationException;
 

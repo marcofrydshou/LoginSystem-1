@@ -56,23 +56,27 @@ public class User {
         return (authoritites.stream().anyMatch(auth -> auth.getAuthority().toLowerCase().equals(authorityName.toLowerCase())));
     }
 
+    public String getAuthority(){
+        return authoritites.get(0).toString();
+    }
+
     public void addAuthority(Role role){
         this.authoritites.add(role);
     }
 
-//    @Transient
-//    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-//
-//    public void setPassword(String password) {
-//        this.password = password;
-//    }
-//
-//    public void hashPassword(){
-//        this.password = encoder.encode(this.password);
-//    }
+    public void removeAuthority(String role) {
+        this.authoritites.removeIf(a -> a.getAuthority().equals(role));
+    }
 
     public User(long id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public User(String username,String password,  String email, boolean enabled){
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this. enabled = enabled;
     }
 }

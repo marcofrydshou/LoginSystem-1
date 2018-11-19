@@ -1,20 +1,33 @@
 package demo.controller;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AuthorizationServiceException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.extern.slf4j.Slf4j;
 
 import demo.exception.BusinessException;
+import demo.exception.NoRolesFoundException;
+import demo.model.Role;
 import demo.model.User;
+import demo.model.UserConfigurationForm;
 import demo.service.UserService;
 
 @Slf4j
 @RestController
-@RequestMapping("/rest")
+@RequestMapping("/rest/user")
 public class UserController {
 
 	private UserService userService;
@@ -22,12 +35,8 @@ public class UserController {
 	@Autowired
 	public UserController( UserService userService){ this.userService = userService; }
 
-	@GetMapping("/")
-	public String hello(){
-		return "hello world";
-	}
-
-	@GetMapping("/users")
+	@GetMapping("/all")
+	@ResponseStatus(HttpStatus.OK)
 	public List<User> findEnabledUsers() throws BusinessException {
 		try{
 			return userService.findEnabledUsers();
@@ -36,7 +45,7 @@ public class UserController {
 		}
 	}
 
-	@GetMapping("/user/name/{username}")
+	@GetMapping("name/{username}")
 	public User findByUsername(@NotBlank @PathVariable(value = "username") String username) throws BusinessException {
 		try{
 			return userService.findByUsername(username);
@@ -45,7 +54,7 @@ public class UserController {
 		}
 	}
 
-	@GetMapping("/user/email/{email}")
+	@GetMapping("/email/{email}")
 	public User find(@NotBlank @PathVariable(value = "email") String email) throws BusinessException {
 		try{
 			return userService.findByEmail(email);
@@ -53,14 +62,22 @@ public class UserController {
 			throw new BusinessException("Users with given email not exists");
 		}
 	}
-/*
-	@PostMapping(value = "/user/create")
-	public boolean create(@RequestBody UserConfigurationForm newUserForm) throws BusinessException {
-		log.debug("create: (Username: '{}'),", newUserForm.getUsername());
-		User newUser = new User(newUserForm.getUsername(), newUserForm.getPassword(), newUserForm.isEnabled(),newUserForm.getEmail());
 
-		userService.createNewUser(newUser);
+	@PostMapping(value = "/create")
+	@ResponseStatus(HttpStatus.CREATED)
+	public User create(@RequestBody UserConfigurationForm newUserForm) throws NoRolesFoundException {
+		log.debug("create: {Username: '{}'}", newUserForm.getUsername());
+		User newUser = userService.createNewUser(
+				newUserForm.getUsername(),newUserForm.getPassword(),newUserForm.getEmail(),
+				newUserForm.isEnabled(),newUserForm.getRoles());
+		return newUser;
+	}
 
-		return true;
-	}*/
+	private boolean hasAdminCreationAuthority(User user) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		List<Role> authorities = (List<Role>) auth.getAuthorities();
+		List<String> roleStrings = authorities.stream().map(Role::getAuthority).collect(Collectors.toList());
+
+		return roleStrings.contains("ADMIN");
+	}
 }

@@ -2,17 +2,21 @@ package demo.service.impl;
 
 import java.util.List;
 import java.util.Optional;
-
-import javax.transaction.Transactional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 
 import demo.exception.DataIntegrityViolationException;
+import demo.exception.NoRolesFoundException;
+import demo.model.Role;
 import demo.model.User;
+import demo.repository.RoleRepository;
 import demo.repository.UserRepository;
 import demo.service.UserService;
 
@@ -21,10 +25,14 @@ import demo.service.UserService;
 public class UserServiceImpl implements UserService {
 
 	private UserRepository userRepository;
+	private RoleRepository roleRepository;
+	private PasswordEncoder encoder;
 
 	@Autowired
-	public UserServiceImpl(UserRepository userRepository) {
+	public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder) {
 		this.userRepository = userRepository;
+		this.roleRepository = roleRepository;
+		this.encoder = encoder;
 	}
 
 	@Override
@@ -34,7 +42,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User findUserById(Long userId) {
+	public User findUserById(long userId) {
 		User user = new User();
 		try{
 			Optional<User> optionalUser = userRepository.findByIdAndEnabledIsTrue(userId);
@@ -50,12 +58,16 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public
-	void createNewUser(User newUser) throws DataIntegrityViolationException {
+	public User createNewUser(String username, String password, String email, boolean enabled, List<String> roles) throws NoRolesFoundException {
 		try{
-//			newUser.hashPassword();
-			userRepository.save(newUser);
-			log.info("Create new user: "+ newUser);
+			List<Role> authorities = roles
+					.stream()
+					.map(Role::new)
+					.collect(Collectors.toList());
+			password = encoder.encode(password);
+			User newUser = new User(username, password, email, enabled);
+			newUser.setAuthoritites(authorities);
+			return userRepository.save(newUser);
 		}
 		catch (DataIntegrityViolationException e){
 			throw new DataIntegrityViolationException(String.format("Duplicate email.") + e);
@@ -82,13 +94,10 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
-	@Override
-	@Transactional
 	public void deleteUser(Long userId) throws DataIntegrityViolationException {
-		Optional<User> optionalUser = userRepository.findById(userId);
-		if(optionalUser.isPresent()){
-			userRepository.delete(optionalUser.get());
-		}
+		Optional<User> userToDelete = userRepository.findById(userId);
+		userToDelete.orElseThrow( ()-> new UsernameNotFoundException("Provided user not found."));
+		userRepository.delete(userToDelete.get());
 	}
 
 	@Override
@@ -129,7 +138,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void updatePassword(User user, String password) {
 		user.setPassword(password);
-//		user.hashPassword();
 
 		user.setTokenDate(null);
 
@@ -140,4 +148,6 @@ public class UserServiceImpl implements UserService {
 	public void save(User user) {
 		userRepository.save(user);
 	}
+
+
 }

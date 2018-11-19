@@ -1,5 +1,6 @@
 package demo.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +14,13 @@ import demo.model.Role;
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
 
-	Optional<Role> findByAuthority(String authority);
+	/**
+	 *
+	 * @param authorities
+	 * @return
+	 */
+	List<Role> findByAuthorityIn(List<String> authorities);
+
+	Role findByAuthority(String authroity);
 
 }
