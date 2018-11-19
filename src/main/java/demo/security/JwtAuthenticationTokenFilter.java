@@ -30,21 +30,16 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
 
 
 
-	private String getToken(HttpServletRequest request){
-		// from httpServletRequest can get header infomations
-		String header = request.getHeader("AUTH_HEADER");
-		if( header != null && header.startsWith("Bearer ") ){
-			return header.substring(7);
-		}
-		return null;
-	}
-
-
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
 
-		String authToken = getToken(httpServletRequest);
-		if(authToken != null){
+		String header = httpServletRequest.getHeader("Authorization");
+
+		if(header == null || !header.startsWith("Bearer ")){
+			throw new RuntimeException("missing token");
+		} else {
+
+			String authToken = header.substring(7);
 
 			// need to send back
 			JwtAuthenticationToken token = new JwtAuthenticationToken(authToken);
@@ -54,7 +49,7 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
 			return getAuthenticationManager().authenticate(token);
 		}
 
-return  null;
+
 	}
 
 	@Override

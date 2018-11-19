@@ -39,4 +39,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	 * @see EntityManager#getReference(Class, Object)
 	 */
 	 User getOne(Long Id);
+
+	 void deleteUserById(User user);
 }

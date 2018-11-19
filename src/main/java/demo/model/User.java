@@ -4,6 +4,9 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -51,14 +54,20 @@ public class User  {
     @Column(name = "token_date")
     private LocalDateTime tokenDate;
 
-    @ManyToMany(targetEntity = User.class, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn(
-                    name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "role_id", referencedColumnName = "id"))
+    @ElementCollection
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private List<Role> authoritites;
 
-    private Collection<Role> roles;
+    public boolean hasAuthority(String authorityName){
+        return (authoritites.stream().anyMatch(auth ->  auth.getAuthority().toLowerCase().equals(authorityName.toLowerCase())));
+    }
 
+
+
+    public void addAuthority(Role role) {
+        this.authoritites.add(role);
+
+    }
 }

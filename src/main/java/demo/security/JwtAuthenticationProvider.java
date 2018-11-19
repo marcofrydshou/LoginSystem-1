@@ -31,7 +31,6 @@ JwtTokenProvider jwtTokenProvider;
 	}
 
 
-
 	@Override protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
 
 		// convert UsernamePasswordAuthenticationToken into Our JwtAuthenticationToken
@@ -51,7 +50,7 @@ JwtTokenProvider jwtTokenProvider;
 
 		// create grants
 		List<GrantedAuthority> grantedAuthorities = AuthorityUtils
-				.commaSeparatedStringToAuthorityList(user.getRoles().toString());
+				.commaSeparatedStringToAuthorityList(user.getAuthoritites().get(0).toString());
 
 		return new JwtUserDetails(user.getId(), user.getUsername(), token, grantedAuthorities);
 	}

@@ -19,4 +19,14 @@ public class JwtAuthenticationToken extends UsernamePasswordAuthenticationToken 
 	public void setToken(String token) {
 		this.token = token;
 	}
+
+
+	public Object getCredential(){
+		return null;
+	}
+
+	public Object getPrincipal(){
+		return null;
+	}
+
 }

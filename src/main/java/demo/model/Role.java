@@ -21,10 +21,9 @@ public class Role {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String name;
 
+	@Column(name="authority")
+	private String authority;
 
-	@ManyToMany(mappedBy = "roles", targetEntity = User.class, fetch = FetchType.LAZY)
-	private Collection<User> users;
 
 }

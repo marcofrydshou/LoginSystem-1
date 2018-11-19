@@ -48,15 +48,16 @@ public class JwtTokenProvider {
        // String userId = Long.toString(user.getId());
 
         //claims fra user til token
-        Claims claims = Jwts.claims().setSubject(user.getUsername());
-        claims.put("id", user.getId().toString());
-        claims.put("role", user.getRoles());
+        Claims claims = Jwts.claims()
+                .setIssuer("Loginsystem")
+                .setSubject(user.getUsername())
+                .setIssuedAt(now)
+                .setExpiration(expire);
+        claims.put("id", String.valueOf(user.getId()));
 
         //token builder
         return Jwts.builder()
                 .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(expire)
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
 
@@ -84,7 +85,11 @@ public class JwtTokenProvider {
 
 
             user = userService.getOne(id);
-            user.setTokenDate(time.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+            if(user !=null && username.equals(user.getUsername())){
+
+                user.setTokenDate(time.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+                userService.saveUser(user);
+            }
 
 
 

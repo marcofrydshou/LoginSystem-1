@@ -23,8 +23,12 @@ public interface UserService  {
 
 	User saveUser(User user);
 
-	void createNewUser(User user);
+	User createNewUser(User user) throws BusinessException;
 
 	User findUserByEmail(String email);
-	
+
+
+	void deleteUser(Long id);
+
+	void updateUser(Long id, User user);
 }
