@@ -1,11 +1,11 @@
 package demo.controller;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
+
+import org.apache.catalina.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import demo.exception.BusinessException;
 import demo.exception.NoRolesFoundException;
+import demo.exception.UnauthorizedRequestException;
 import demo.model.Role;
 import demo.model.User;
 import demo.model.UserConfigurationForm;
@@ -73,11 +74,40 @@ public class UserController {
 		return newUser;
 	}
 
-	private boolean hasAdminCreationAuthority(User user) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		List<Role> authorities = (List<Role>) auth.getAuthorities();
-		List<String> roleStrings = authorities.stream().map(Role::getAuthority).collect(Collectors.toList());
+	@DeleteMapping(value = "delete/{user_id}")
+	public boolean delete(@PathVariable("user_id") long userId){
+		if(userId <= 0){
+			throw new NullPointerException("User ID is invalid.");
+		}
+		log.debug("delete: User ID: '{}', ", userId);
+		userService.deleteUser(userId);
 
-		return roleStrings.contains("ADMIN");
+		return true;
 	}
+
+	@PutMapping(value = "edit/{user_id}")
+	public boolean edit(@PathVariable("user_id") long userId, @RequestBody UserConfigurationForm userForm) throws UnauthorizedRequestException {
+
+//		userService.updateUser(userId);
+		return true;
+	}
+//
+//	private boolean hasAdminCreationAuthority(User user) {
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		List<Role> authorities = (List<Role>) auth.getAuthorities();
+//		List<String> roleStrings = authorities.stream().map(Role::getAuthority).collect(Collectors.toList());
+//
+//		return roleStrings.contains("ADMIN");
+//	}
+
+//	private boolean verifyUserModificationAuthorization(Long requestedId) {
+//		try {
+//			User currentUser = SecurityUtil.getUser();
+//
+//			return currentUser.hasAuthority("ROLE_ADM") || requestedId.equals(currentUser.getId());
+//		} catch (Exception e) {
+//			log.error("User verification for a PUT/DELETE endpoint failed unexpectedly.", e);
+//			return false;
+//		}
+//	}
 }

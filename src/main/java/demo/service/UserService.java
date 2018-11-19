@@ -20,9 +20,9 @@ public interface UserService  {
 
 	User createNewUser(String username, String password, String email, boolean enabled, List<String> roles) throws NoRolesFoundException;
 
-	void updateUser(Long userId, User user) throws DataIntegrityViolationException;
+	void updateUser(long userId, User user) throws DataIntegrityViolationException;
 
-	void deleteUser(Long userId);
+	void deleteUser(long userId);
 
 
 	/**
