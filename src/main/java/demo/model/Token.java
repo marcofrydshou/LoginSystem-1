@@ -4,27 +4,28 @@ import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
-import org.springframework.security.core.GrantedAuthority;
-
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
 @Data
+@EqualsAndHashCode(callSuper = false)
 @Entity
-@Table(name = "roles")
-public class Role implements GrantedAuthority {
+@Table(name = "password_token")
+public class Token {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(name="authority")
-	private String authority;
+	@Column
+	private String token;
+
+	@OneToOne(targetEntity = User.class)
+	@JoinColumn(nullable = false, name = "user_id")
+	private User user;
+
+	@Column
+	private LocalDateTime expiryDate;
 
 	@Column(nullable = false)
 	protected LocalDateTime created;
@@ -42,7 +43,9 @@ public class Role implements GrantedAuthority {
 		modified = LocalDateTime.now();
 	}
 
-	public Role(String authority) {
-		this.authority = authority;
+	public Token(String token, LocalDateTime expiryDate, User user) {
+		this.token = token;
+		this.expiryDate = expiryDate;
+		this.user = user;
 	}
 }

@@ -1,4 +1,4 @@
-package demo.model.form;
+package demo.model.dto;
 
 import java.util.List;
 
@@ -12,12 +12,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserConfigurationForm {
-
+public class UserDTO {
 	private String username;
 	private String password;
-	private String email;
 	private boolean enabled;
 	private List<String> roles;
+	private String email;
 
 }

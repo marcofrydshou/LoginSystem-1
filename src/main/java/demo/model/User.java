@@ -1,15 +1,12 @@
 package demo.model;
 
-import lombok.*;
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-
-import java.time.LocalDateTime;
 import java.util.List;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import javax.persistence.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * User Entity
@@ -43,13 +40,12 @@ public class User {
     @Column(name = "enabled")
     private boolean enabled;
 
-    @Column(name = "token_date")
-    private LocalDateTime tokenDate;
-
-    @ElementCollection
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_role",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id")}
+    )
     private List<Role> authoritites;
 
     public boolean hasAuthority(String authorityName){
@@ -65,6 +61,7 @@ public class User {
     }
 
     public void removeAuthority(String role) {
+        // removeIf() it removes all the elements from the list which the same with given a
         this.authoritites.removeIf(a -> a.getAuthority().equals(role));
     }
 

@@ -47,7 +47,7 @@ public class JwtValidator {
 			// check if the userId exists in our db
 			user = userService.findUserById((userId));
 			if(user != null && userName.equals(user.getName())){
-				user.setTokenDate(exp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+//				user.setTokenDate(exp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
 				userService.save(user);
 			}
 		}

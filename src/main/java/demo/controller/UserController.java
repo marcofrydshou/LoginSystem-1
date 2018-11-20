@@ -1,19 +1,11 @@
 package demo.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
 
-import org.apache.catalina.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AuthorizationServiceException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.extern.slf4j.Slf4j;
@@ -21,9 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import demo.exception.BusinessException;
 import demo.exception.NoRolesFoundException;
 import demo.exception.UnauthorizedRequestException;
-import demo.model.Role;
 import demo.model.User;
-import demo.model.UserConfigurationForm;
+import demo.model.dto.UserDTO;
 import demo.service.UserService;
 
 @Slf4j
@@ -66,7 +57,7 @@ public class UserController {
 
 	@PostMapping(value = "/create")
 	@ResponseStatus(HttpStatus.CREATED)
-	public User createUser(@RequestBody UserConfigurationForm newUserForm) throws NoRolesFoundException {
+	public User createUser(@RequestBody UserDTO newUserForm) throws NoRolesFoundException {
 		log.debug("create: {Username: '{}'}", newUserForm.getUsername());
 		User newUser = userService.createNewUser(
 				newUserForm.getUsername(),newUserForm.getPassword(),newUserForm.getEmail(),
@@ -75,7 +66,7 @@ public class UserController {
 	}
 
 	@DeleteMapping(value = "delete/{user_id}")
-	public boolean delete(@PathVariable("user_id") long userId){
+	public boolean deleteUser(@PathVariable("user_id") long userId){
 		if(userId <= 0){
 			throw new NullPointerException("User ID is invalid.");
 		}
@@ -86,28 +77,8 @@ public class UserController {
 	}
 
 	@PutMapping(value = "edit/{user_id}")
-	public boolean editUser(@PathVariable("user_id") long userId, @RequestBody UserConfigurationForm userForm) throws UnauthorizedRequestException {
+	public boolean editUser(@PathVariable("user_id") long userId, @RequestBody UserDTO userForm) throws UnauthorizedRequestException {
 
-//		userService.updateUser(userId);
 		return true;
 	}
-//
-//	private boolean hasAdminCreationAuthority(User user) {
-//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//		List<Role> authorities = (List<Role>) auth.getAuthorities();
-//		List<String> roleStrings = authorities.stream().map(Role::getAuthority).collect(Collectors.toList());
-//
-//		return roleStrings.contains("ADMIN");
-//	}
-
-//	private boolean verifyUserModificationAuthorization(Long requestedId) {
-//		try {
-//			User currentUser = SecurityUtil.getUser();
-//
-//			return currentUser.hasAuthority("ROLE_ADM") || requestedId.equals(currentUser.getId());
-//		} catch (Exception e) {
-//			log.error("User verification for a PUT/DELETE endpoint failed unexpectedly.", e);
-//			return false;
-//		}
-//	}
 }

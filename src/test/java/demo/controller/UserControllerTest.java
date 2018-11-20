@@ -2,7 +2,6 @@ package demo.controller;
 
 import static junit.framework.Assert.*;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 import javax.transaction.Transactional;
@@ -24,7 +23,7 @@ import demo.config.TestApplicationConfig;
 import demo.exception.NoRolesFoundException;
 import demo.model.Role;
 import demo.model.User;
-import demo.model.UserConfigurationForm;
+import demo.model.dto.UserDTO;
 import demo.repository.RoleRepository;
 import demo.repository.UserRepository;
 
@@ -49,7 +48,7 @@ public class UserControllerTest {
 	@Before
 	public void setUp() {
 		role = roleRepository.getOne(100l);
-		stubUser = new User(100, "testName", "testUsername", "test@dk.dk", "testPassword", "testAddress", true, LocalDateTime.now(), Collections.singletonList(role));
+		stubUser = new User(100, "testName", "testUsername", "test@dk.dk", "testPassword", "testAddress", true, Collections.singletonList(role));
 		Authentication auth = new UsernamePasswordAuthenticationToken(stubUser, null);
 		SecurityContextHolder.getContext().setAuthentication(auth);
 	}
@@ -62,16 +61,20 @@ public class UserControllerTest {
 	@Test
 	@Transactional
 	public void createUser() throws NoRolesFoundException {
-		userRepository.deleteAll();
-
+		// create a new user
 		List<String> roles = new LinkedList<>();
 		roles.add("SUPERUSER");
-		UserConfigurationForm newUser = new UserConfigurationForm("testUser","testPass",true, roles, "test@dk.dk");
+		UserDTO newUser = new UserDTO("testUser","testPass",true, roles, "test@dk.dk");
 		userController.createUser(newUser);
 
+		// find the created usesr by username
 		User createdUser = userRepository.findByUsernameAndEnabledIsTrue("testUser").get();
+
+		// log the user email and BCrypt password
 		log.info("CREATED USER'S EMAIL->: "+createdUser.getEmail());
 		log.info("CREATED USER'S PASSWORD->: "+ createdUser.getPassword());
+
+		// check the user with given username/email/enabled exists, and password mathces with 'testPass'
 		assertNotNull(createdUser);
 		assertEquals(createdUser.getUsername(),"testUser");
 		assertEquals(createdUser.isEnabled(),true);
@@ -79,17 +82,21 @@ public class UserControllerTest {
 		assertTrue(encoder.matches("testPass",createdUser.getPassword()));
 	}
 
-	@Test(expected = NoSuchElementException.class)
+	@Test
 	@Transactional
 	public void delteUser(){
-
-		userRepository.deleteAll();
+		// save stubUser and check the user exists
 		userRepository.save(stubUser);
-//
-//		Optional<User> userOptional = userRepository.findByUsernameAndEnabledIsTrue("testUsername");
-//
-//		assertNotNull(userOptional.get());
+		Optional<User> userOptional = userRepository.findByUsernameAndEnabledIsTrue("testUsername");
+		assertNotNull(userOptional.get());
 
+//		// delete the user with user id
+		userController.deleteUser(userOptional.get().getId());
+//
+//		// find the deleted user and will throw NosuchElementException
+//		Optional<User> userOptional2 = userRepository.findByIdAndEnabledIsTrue(100);
+//		userOptional2.get();
 	}
+
 
 }

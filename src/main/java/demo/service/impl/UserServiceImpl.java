@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import demo.exception.DataIntegrityViolationException;
 import demo.exception.NoRolesFoundException;
-import demo.exception.UnauthorizedRequestException;
 import demo.model.Role;
 import demo.model.User;
 import demo.repository.RoleRepository;
@@ -86,23 +85,11 @@ public class UserServiceImpl implements UserService {
 				fetchedUser.setEmail(userInfo.getEmail());
 				fetchedUser.setPassword(userInfo.getPassword());
 				fetchedUser.setEnabled(userInfo.isEnabled());
-//				fetchedUser.hashPassword();
 				userRepository.save(fetchedUser);
 				if (userId <= 0) {
 					throw new NullPointerException("User ID is invalid.");
 				}
-//
-//				if (verifyUserModificationAuthorization(userId)) {
-//					User editedUserInfo = new User(userForm.getUsername(), userForm.getPassword(), userForm.isEnabled());
-//					editedUserInfo.setEmail(userForm.getEmail());
-//					editedUserInfo = userService.populateNewDMRUserWithRolesAndAffiliates(editedUserInfo, userForm.getRoles(), userForm.getAffiliateId());
-//
-//					userService.edit(userId, editedUserInfo);
-//
-//					return true;
-//				} else {
-//					throw new UnauthorizedRequestException(String.format("Currently logged-in user does not have the required credentials for editing the user bearing the ID (%s).", userId));
-//				}
+
 			}
 		}
 		catch (NullPointerException e){
@@ -154,8 +141,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void updatePassword(User user, String password) {
 		user.setPassword(password);
-
-		user.setTokenDate(null);
 
 		userRepository.save(user);
 	}
