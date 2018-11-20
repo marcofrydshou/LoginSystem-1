@@ -18,8 +18,13 @@ public class JWTLoginSuccessResponse implements AuthenticationSuccessHandler {
 	private boolean sucess;
 	private String token;
 
+	public JWTLoginSuccessResponse(boolean sucess, String token) {
+		this.sucess = sucess;
+		this.token = token;
+	}
 
-
+	public JWTLoginSuccessResponse() {
+	}
 
 	public boolean isSucess() {
 		return sucess;

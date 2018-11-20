@@ -2,12 +2,14 @@ package demo.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.zip.DataFormatException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +26,9 @@ import lombok.extern.slf4j.Slf4j;
 import demo.Payload.JWTLoginSuccessResponse;
 import demo.Payload.LoginRequest;
 import demo.exception.InvalidLoginResponse;
+import demo.model.LoginForm;
 import demo.security.JwtAuthenticationProvider;
+import demo.security.JwtAuthenticationToken;
 import demo.security.JwtAuthenticationTokenFilter;
 import demo.security.JwtTokenProvider;
 import demo.Validator.UserValidator;
@@ -63,6 +67,8 @@ public class UserController {
 		this.authenticationManager = authenticationManager;
 	}
 
+
+	// register new user
 	@PostMapping("/register")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody User user, BindingResult result, Errors errors) throws BusinessException {
 
@@ -81,70 +87,80 @@ public class UserController {
 	}
 
 
-
+// USer login
 	@PostMapping("login")
-	public ResponseEntity<?> userLogin(@Valid @RequestBody User user) throws BusinessException, IOException, ServletException {
-
-		User user1 = userService.getUserByUsername(user.getUsername());
-		if(user1== null){
-			throw new NullPointerException("user does not exist");
-		}
-
-		String jwt = jwtTokenProvider.generateToken(user1);
-		jwtTokenProvider.validateToken(jwt);
-
-		return new ResponseEntity<User>(user1, HttpStatus.OK);
-
-		//Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-
-
-	}
-
-	@PostMapping("token")
-	public String generate(@RequestBody final User user){
-		return jwtTokenProvider.generateToken(user);
-
-	}
-
-
-
-
-
-/*
-
-	@PostMapping("/user/login")
-	public ResponseEntity<?> authenticateUser(@Valid @RequestBody HttpServletRequest req, HttpServletResponse res){
-
-
-
+	public ResponseEntity<?> userLogin(@Valid @RequestBody LoginForm loginForm) throws BusinessException, IOException, ServletException {
 
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(
-						loginRequest.getUserName(),
-						loginRequest.getPassword()
+						loginForm.getUsername(), loginForm.getPassword()
 				)
 		);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String jwt = TOKEN_PREFIX + jwtTokenProvider.generateToken(authentication);
-		return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwt));
+		User user = (User)authentication.getPrincipal();
+		String token = jwtTokenProvider.generateToken(user);
+
+		return ResponseEntity.ok(new JWTLoginSuccessResponse(true, token));
+
 	}
 
-*/
 
 
+// get all users
 	@RequestMapping("/all")
 	public List<User> getAllUsers() throws BusinessException {
 		return userService.getAllUsers();
 	}
 
-	@RequestMapping("/getusername")
-	public User getUserByName(@NotBlank @PathVariable( value = "name") String username) throws BusinessException {
+	// get user from username
+	@RequestMapping("getusername/{username}")
+	public User getUserByName(@NotBlank @PathVariable( value = "username") String username) throws BusinessException {
 		try {
 			return userService.getUserByUsername(username);
 		}catch (Exception ex){
 			throw new BusinessException("Username not found");
 		}
 
+	}
+
+
+	//get user form email
+	@RequestMapping("email/{email}")
+	public User findUserByEmail(@NotBlank @PathVariable(value = "email") String email) throws BusinessException {
+
+		try {
+			return userService.findUserByEmail(email);
+		}catch (Exception ex){
+			throw new BusinessException("no such email exist");		}
+	}
+
+
+	@DeleteMapping("delete/{id}")
+	public boolean deleteUser(@PathVariable(value =  "id") Long id){
+		try {
+			if(id == null){
+				throw  new NullPointerException("invalid user id");
+			}
+			userService.deleteUser(id);
+			return true;
+		}catch (Exception ex){
+			throw  new NullPointerException();
+		}
+	}
+
+	@PutMapping("update/{id}")
+	public boolean edituser(@PathVariable(value = "id")@Valid @RequestBody User user, Long id){
+
+		try {
+			if(id == null || !id.equals(user.getId())){
+				throw new NullPointerException("user id not valid or doesn't match user");
+			}
+				userService.updateUser(id, user);
+				return true;
+
+		}catch (Exception ex){
+			throw new NullPointerException();
+		}
 	}
 
 
