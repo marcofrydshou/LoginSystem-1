@@ -56,7 +56,7 @@ public class UserController {
 	}
 
 	@GetMapping("/email/{email}")
-	public User find(@NotBlank @PathVariable(value = "email") String email) throws BusinessException {
+	public User findByEmail(@NotBlank @PathVariable(value = "email") String email) throws BusinessException {
 		try{
 			return userService.findByEmail(email);
 		}catch (Exception e){
@@ -66,7 +66,7 @@ public class UserController {
 
 	@PostMapping(value = "/create")
 	@ResponseStatus(HttpStatus.CREATED)
-	public User create(@RequestBody UserConfigurationForm newUserForm) throws NoRolesFoundException {
+	public User createUser(@RequestBody UserConfigurationForm newUserForm) throws NoRolesFoundException {
 		log.debug("create: {Username: '{}'}", newUserForm.getUsername());
 		User newUser = userService.createNewUser(
 				newUserForm.getUsername(),newUserForm.getPassword(),newUserForm.getEmail(),
@@ -86,7 +86,7 @@ public class UserController {
 	}
 
 	@PutMapping(value = "edit/{user_id}")
-	public boolean edit(@PathVariable("user_id") long userId, @RequestBody UserConfigurationForm userForm) throws UnauthorizedRequestException {
+	public boolean editUser(@PathVariable("user_id") long userId, @RequestBody UserConfigurationForm userForm) throws UnauthorizedRequestException {
 
 //		userService.updateUser(userId);
 		return true;

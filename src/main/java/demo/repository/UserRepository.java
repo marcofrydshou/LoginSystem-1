@@ -15,9 +15,9 @@ import demo.model.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
 	/**
-	 *
-	 * @param userId
-	 * @return
+	 * Find a enabled user by user id
+	 * @param userId a unik user id
+	 * @return A container object of user
 	 */
 	Optional<User> findByIdAndEnabledIsTrue(long userId);
 
@@ -40,5 +40,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	 * @return a user with the given email
 	 */
 	Optional<User> findByEmailAndEnabledIsTrue(String email);
+
+	/**
+	 * Find a enabled user withen given name
+	 * @param name the user's name
+	 * @return a container object with user
+	 */
+	Optional<User> findByNameAndEnabledIsTrue(String name);
 
 }

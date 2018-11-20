@@ -12,13 +12,25 @@ import demo.model.User;
 public interface UserService  {
 
 	User findUserById(long id);
+
 	/**
 	 * Find all enabled users
 	 * @return A list of enabled users
 	 */
 	List<User> findEnabledUsers();
 
+	/**
+	 * Create new user with those five params
+	 * @param username username of the user
+	 * @param password password of the user
+	 * @param email email of the user
+	 * @param enabled is true by default
+	 * @param roles a list of authorities
+	 * @return the created user
+	 * @throws NoRolesFoundException if the role does not exists throws this exception
+	 */
 	User createNewUser(String username, String password, String email, boolean enabled, List<String> roles) throws NoRolesFoundException;
+
 
 	void updateUser(long userId, User user) throws DataIntegrityViolationException;
 
