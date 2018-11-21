@@ -82,7 +82,7 @@ public class UserControllerTest {
 		assertTrue(encoder.matches("testPass",createdUser.getPassword()));
 	}
 
-	@Test
+	@Test(expected = NoSuchElementException.class)
 	@Transactional
 	public void delteUser(){
 		// save stubUser and check the user exists
@@ -90,12 +90,12 @@ public class UserControllerTest {
 		Optional<User> userOptional = userRepository.findByUsernameAndEnabledIsTrue("testUsername");
 		assertNotNull(userOptional.get());
 
-//		// delete the user with user id
+		// delete the user with user id
 		userController.deleteUser(userOptional.get().getId());
-//
-//		// find the deleted user and will throw NosuchElementException
-//		Optional<User> userOptional2 = userRepository.findByIdAndEnabledIsTrue(100);
-//		userOptional2.get();
+
+		// find the deleted user and will throw NosuchElementException
+		Optional<User> userOptional2 = userRepository.findByIdAndEnabledIsTrue(100);
+		userOptional2.get();
 	}
 
 
