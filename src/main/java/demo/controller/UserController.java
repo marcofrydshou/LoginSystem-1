@@ -7,10 +7,14 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotBlank;
 
+import demo.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AuthorizationServiceException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.extern.slf4j.Slf4j;
@@ -71,13 +75,28 @@ public class UserController {
 	@PostMapping(value = "/create")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) throws NoRolesFoundException {
-		log.debug("create: {Username: '{}'}", userDTO.getUsername());
-		User createdUser = userService.createNewUser(
-				userDTO.getUsername(),
-				userDTO.getPassword(),
-				userDTO.getEmail(),
-				Collections.singletonList(userDTO.getAuthority()));
-		return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
+
+		// get user details from SecurityContextHolder
+		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		if(userDTO.getAuthority().equals("ADMIN") || userDTO.getAuthority().equals("SUPERUSER")){
+			if (!hasAdminCreationAuthority(userDTO)) {
+				Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+				log.debug("User ({}) attempted to access /create endpoint with authority ({}).", auth.getPrincipal().toString(), auth.getAuthorities().toString());
+				throw new AuthorizationServiceException("User '%s' not authorized for this action.");
+			}
+		}
+		if(user.getAuthorities().contains("ADMIN") || user.getAuthorities().contains("SUPERUSER") ){
+			log.debug("create: {Username: '{}'}", userDTO.getUsername());
+			User createdUser = userService.createNewUser(
+					userDTO.getUsername(),
+					userDTO.getPassword(),
+					userDTO.getEmail(),
+					Collections.singletonList(userDTO.getAuthority()));
+			return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
+		}
+		return new ResponseEntity<>(userDTO, HttpStatus.BAD_REQUEST);
+
 	}
 
 	@DeleteMapping(value = "delete/{user_id}")
@@ -96,4 +115,14 @@ public class UserController {
 
 		return true;
 	}
+
+
+	private boolean hasAdminCreationAuthority(UserDTO userDTO) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		List<Role> authorities = (List<Role>) auth.getAuthorities();
+		List<String> roleStrings = authorities.stream().map(Role::getAuthority).collect(Collectors.toList());
+
+		return roleStrings.contains("ADMIN");
+	}
+
 }

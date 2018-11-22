@@ -1,5 +1,6 @@
 package demo.model;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.*;
@@ -7,6 +8,8 @@ import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * User Entity
@@ -16,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +43,7 @@ public class User {
     @Column(name = "enabled")
     private boolean enabled;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_role",
             joinColumns = {@JoinColumn(name = "user_id")},
@@ -52,9 +55,6 @@ public class User {
         return (authoritites.stream().anyMatch(auth -> auth.getAuthority().toLowerCase().equals(authorityName.toLowerCase())));
     }
 
-    public String getAuthority(){
-        return authoritites.get(0).toString();
-    }
 
     public void addAuthority(Role role){
         this.authoritites.add(role);
@@ -76,5 +76,25 @@ public class User {
         this.email = email;
         this.enabled = enabled;
         this.authoritites = authoritites;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authoritites;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 }

@@ -1,10 +1,9 @@
 package demo.security;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 import org.apache.commons.lang.time.DateUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -15,6 +14,9 @@ import demo.model.User;
 
 @Component
 public class JwtGenerator {
+
+	@Value("${app.jwt.secret}")
+	private String secretKey;
 
 	public String generate(User user) {
 
@@ -30,7 +32,7 @@ public class JwtGenerator {
 		claims.put("userId",String.valueOf(user.getId()));
 		return Jwts.builder()
 				.setClaims(claims)
-				.signWith(SignatureAlgorithm.HS512, "test")
+				.signWith(SignatureAlgorithm.HS512, secretKey)
 				.compact();
 	}
 }

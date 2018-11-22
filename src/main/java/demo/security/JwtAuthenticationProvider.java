@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;
 
 import demo.model.JwtAuthenticationToken;
-import demo.model.JwtUserDetails;
 import demo.model.User;
 
 /**
@@ -49,11 +48,7 @@ public class JwtAuthenticationProvider extends AbstractUserDetailsAuthentication
 			throw new RuntimeException("JWT Token is incorrect");
 		}
 
-		// create grants
-		List<GrantedAuthority> grantedAuthorities = AuthorityUtils
-				.commaSeparatedStringToAuthorityList(user.getAuthoritites().get(0).toString());
-		return new JwtUserDetails(user.getId(),user.getUsername(),user.getEmail(),
-				token, grantedAuthorities);
+		return new User(user.getUsername(),user.getPassword(),user.getEmail(), user.isEnabled(),user.getAuthoritites());
 	}
 
 	@Override

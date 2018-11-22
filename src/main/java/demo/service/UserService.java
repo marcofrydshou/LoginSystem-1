@@ -24,12 +24,12 @@ public interface UserService  {
 	 * @param username username of the user
 	 * @param password password of the user
 	 * @param email email of the user
-	 * @param enabled is true by default
 	 * @param roles a list of authorities
 	 * @return the created user
 	 * @throws NoRolesFoundException if the role does not exists throws this exception
+	 * @throws DataIntegrityViolationException throw an exception when the mails exists
 	 */
-	User createNewUser(String username, String password, String email, List<String> roles) throws NoRolesFoundException;
+	User createNewUser(String username, String password, String email, List<String> roles) throws NoRolesFoundException,DataIntegrityViolationException;
 
 
 	void updateUser(long userId, User user) throws DataIntegrityViolationException;

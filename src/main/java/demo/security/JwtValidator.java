@@ -4,6 +4,7 @@ import java.time.ZoneId;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -22,7 +23,8 @@ import demo.service.UserService;
 @Component
 public class JwtValidator {
 
-	private String secretKey = "test";
+	@Value("${app.jwt.secret}")
+	private String secretKey;
 
 	@Autowired
 	private UserService userService;
@@ -46,10 +48,6 @@ public class JwtValidator {
 
 			// check if the userId exists in our db
 			user = userService.findUserById((userId));
-			if(user != null && userName.equals(user.getName())){
-//				user.setTokenDate(exp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
-				userService.save(user);
-			}
 		}
 		catch (Exception e){
 			throw new UnsupportedJwtException("JWT Token is missing"+ e);

@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User createNewUser(String username, String password, String email, List<String> roles) throws NoRolesFoundException {
+	public User createNewUser(String username, String password, String email, List<String> roles) throws NoRolesFoundException,DataIntegrityViolationException {
 		try{
 			List<Role> authorities = roleRepository.findByAuthorityIn(roles);
 
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
 			}
 
 			password = encoder.encode(password);
-			User newUser = new User(username, password, email, true,authorities);
+			User newUser = new User(username, password, email, true, authorities);
 			return userRepository.save(newUser);
 		}
 		catch (DataIntegrityViolationException e){
