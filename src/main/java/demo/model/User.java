@@ -40,7 +40,7 @@ public class User {
     @Column(name = "enabled")
     private boolean enabled;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",
             joinColumns = {@JoinColumn(name = "user_id")},
@@ -70,10 +70,11 @@ public class User {
         this.name = name;
     }
 
-    public User(String username,String password,  String email, boolean enabled){
+    public User(String username, String password,  String email, boolean enabled, List<Role> authoritites){
         this.username = username;
         this.password = password;
         this.email = email;
-        this. enabled = enabled;
+        this.enabled = enabled;
+        this.authoritites = authoritites;
     }
 }

@@ -2,7 +2,6 @@ package demo.service.impl;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -58,15 +57,16 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User createNewUser(String username, String password, String email, boolean enabled, List<String> roles) throws NoRolesFoundException {
+	public User createNewUser(String username, String password, String email, List<String> roles) throws NoRolesFoundException {
 		try{
-			List<Role> authorities = roles
-					.stream()
-					.map(Role::new)
-					.collect(Collectors.toList());
+			List<Role> authorities = roleRepository.findByAuthorityIn(roles);
+
+			if (authorities.isEmpty()) {
+				throw new NoRolesFoundException("No roles found for given role names.");
+			}
+
 			password = encoder.encode(password);
-			User newUser = new User(username, password, email, enabled);
-			newUser.setAuthoritites(authorities);
+			User newUser = new User(username, password, email, true,authorities);
 			return userRepository.save(newUser);
 		}
 		catch (DataIntegrityViolationException e){

@@ -29,7 +29,7 @@ public interface UserService  {
 	 * @return the created user
 	 * @throws NoRolesFoundException if the role does not exists throws this exception
 	 */
-	User createNewUser(String username, String password, String email, boolean enabled, List<String> roles) throws NoRolesFoundException;
+	User createNewUser(String username, String password, String email, List<String> roles) throws NoRolesFoundException;
 
 
 	void updateUser(long userId, User user) throws DataIntegrityViolationException;

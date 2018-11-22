@@ -1,11 +1,16 @@
 package demo.controller;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.extern.slf4j.Slf4j;
@@ -27,14 +32,22 @@ public class UserController {
 	@Autowired
 	public UserController( UserService userService){ this.userService = userService; }
 
-	@GetMapping("/all")
+	@GetMapping(value = "/all",produces = MediaType.APPLICATION_JSON_VALUE)
+	@Transactional
 	@ResponseStatus(HttpStatus.OK)
-	public List<User> findEnabledUsers() throws BusinessException {
-		try{
-			return userService.findEnabledUsers();
-		}catch (Exception e){
-			throw new BusinessException("Users not exists");
-		}
+	public ResponseEntity<List<UserDTO>> findEnabledUsers() {
+
+			List<UserDTO> users = userService.findEnabledUsers()
+					.stream()
+					.map( u -> new UserDTO(
+							u.getId(),
+							u.getUsername(),
+							u.getEmail(),
+							u.getAuthoritites().stream()
+								.map(i-> i.getAuthority()).findFirst().get())
+					).collect(Collectors.toList());
+
+			return new ResponseEntity<>(users,HttpStatus.OK);
 	}
 
 	@GetMapping("name/{username}")
@@ -57,12 +70,14 @@ public class UserController {
 
 	@PostMapping(value = "/create")
 	@ResponseStatus(HttpStatus.CREATED)
-	public User createUser(@RequestBody UserDTO newUserForm) throws NoRolesFoundException {
-		log.debug("create: {Username: '{}'}", newUserForm.getUsername());
-		User newUser = userService.createNewUser(
-				newUserForm.getUsername(),newUserForm.getPassword(),newUserForm.getEmail(),
-				newUserForm.isEnabled(),newUserForm.getRoles());
-		return newUser;
+	public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) throws NoRolesFoundException {
+		log.debug("create: {Username: '{}'}", userDTO.getUsername());
+		User createdUser = userService.createNewUser(
+				userDTO.getUsername(),
+				userDTO.getPassword(),
+				userDTO.getEmail(),
+				Collections.singletonList(userDTO.getAuthority()));
+		return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
 	}
 
 	@DeleteMapping(value = "delete/{user_id}")

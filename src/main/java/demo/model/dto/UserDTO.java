@@ -1,22 +1,27 @@
 package demo.model.dto;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
+	private long id;
 	private String username;
 	private String password;
-	private boolean enabled;
-	private List<String> roles;
 	private String email;
+	private String authority;
 
+	public UserDTO(long id, String username, String email, String authority) {
+		this.id = id;
+		this.username = username;
+		this.email = email;
+		this.authority = authority;
+	}
+	public UserDTO(){
+
+	}
 }

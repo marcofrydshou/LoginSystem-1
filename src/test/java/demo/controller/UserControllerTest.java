@@ -1,6 +1,6 @@
 package demo.controller;
 
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 
 import java.util.*;
 
@@ -62,9 +62,7 @@ public class UserControllerTest {
 	@Transactional
 	public void createUser() throws NoRolesFoundException {
 		// create a new user
-		List<String> roles = new LinkedList<>();
-		roles.add("SUPERUSER");
-		UserDTO newUser = new UserDTO("testUser","testPass",true, roles, "test@dk.dk");
+		UserDTO newUser = new UserDTO(100,"testUser","test@dk.dk","SUPERUSER" );
 		userController.createUser(newUser);
 
 		// find the created usesr by username
