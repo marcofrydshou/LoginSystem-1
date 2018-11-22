@@ -27,7 +27,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8888/rest/users",
+							"raw": "http://localhost:8888/rest/user/all",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -35,7 +35,8 @@
 							"port": "8888",
 							"path": [
 								"rest",
-								"users"
+								"user",
+								"all"
 							]
 						},
 						"description": "Get all users"
@@ -61,7 +62,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8888/rest/user/name/test",
+							"raw": "http://localhost:8888/rest/user/name/admin",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -71,7 +72,7 @@
 								"rest",
 								"user",
 								"name",
-								"test"
+								"admin"
 							]
 						}
 					},
@@ -88,8 +89,7 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJMb2dpblN5c3RlbSIsInN1YiI6InRlc3QgdXNlcjEiLCJpYXQiOjE1NDIzNzQxMTUsImV4cCI6MTU0NTcxMDQwMCwidXNlcklkIjoiMTAwIn0.1Wtf0tzR51u4N1v0WL-fWHqkqlZG8BcFJ-XkqsrGzjmlOCnNZwT0W9LK6GPfVWAmFOFW4u1BNZgiM5je1cwDPQ",
-								"type": "text",
-								"disabled": true
+								"type": "text"
 							}
 						],
 						"body": {
@@ -137,7 +137,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"id\":100,\n\t\"name\": \"test user1\"\n}"
+							"raw": "{\n\t\"id\":200,\n\t\"name\": \"test user2\"\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8888/token",
@@ -148,6 +148,75 @@
 							"port": "8888",
 							"path": [
 								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJMb2dpblN5c3RlbSIsInN1YiI6InRlc3QgdXNlcjEiLCJpYXQiOjE1NDIzNzQxMTUsImV4cCI6MTU0NTcxMDQwMCwidXNlcklkIjoiMTAwIn0.1Wtf0tzR51u4N1v0WL-fWHqkqlZG8BcFJ-XkqsrGzjmlOCnNZwT0W9LK6GPfVWAmFOFW4u1BNZgiM5je1cwDPQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"createuser\",\n\t\"email\": \"creatuser@dk.dk\",\n\t\"password\": \"123\",\n\t\"authority\":\"ADMIN\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8888/rest/user/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"rest",
+								"user",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete exists user",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJMb2dpblN5c3RlbSIsInN1YiI6InRlc3QgdXNlcjEiLCJpYXQiOjE1NDIzNzQxMTUsImV4cCI6MTU0NTcxMDQwMCwidXNlcklkIjoiMTAwIn0.1Wtf0tzR51u4N1v0WL-fWHqkqlZG8BcFJ-XkqsrGzjmlOCnNZwT0W9LK6GPfVWAmFOFW4u1BNZgiM5je1cwDPQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8888/rest/user/delete/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"rest",
+								"user",
+								"delete",
+								"1"
 							]
 						}
 					},
