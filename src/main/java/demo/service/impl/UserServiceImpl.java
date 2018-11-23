@@ -67,6 +67,7 @@ public class UserServiceImpl implements UserService {
 
 			password = encoder.encode(password);
 			User newUser = new User(username, password, email, true, authorities);
+			log.info("new user with encode password->" + newUser);
 			return userRepository.save(newUser);
 		}
 		catch (DataIntegrityViolationException e){

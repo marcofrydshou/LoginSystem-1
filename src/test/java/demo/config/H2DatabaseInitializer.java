@@ -12,8 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ActiveProfiles("test")
 public class H2DatabaseInitializer {
+
 	private final static String DB_CONNECTION_STRING = "jdbc:h2:mem:db;DB_CLOSE_DELAY=-1";
-	private final static String DB_RESOURCE_FOLDER = "/db/h2testdata/";
+	private final static String DB_RESOURCE_FOLDER = "/db/";
 	private static Connection conn;
 	private static Class currentClass;
 
@@ -23,26 +24,11 @@ public class H2DatabaseInitializer {
 	}
 
 	/**
-	 * Sets up test data in the H2 database
-	 */
-	public static void initDB() {
-		try {
-			log.info("RUNNING INITDB");
-			conn = DriverManager.getConnection(DB_CONNECTION_STRING, "h2", "h2");
-			ScriptUtils.executeSqlScript(conn, new ClassPathResource(DB_RESOURCE_FOLDER + "init-setup-data.sql"));
-			ScriptUtils.executeSqlScript(conn, new ClassPathResource(DB_RESOURCE_FOLDER + "test-data.sql"));
-		} catch (Exception e) {
-			log.error("Error occurred attempting to run SQL script against H2 database.");
-			e.printStackTrace();
-		}
-	}
-
-	/**
 	 * Sets up test data in the H2 database, taking in script names as varargs and executing them.
 	 *
 	 * @param sqlFileNames The names of the SQL files to be executed.
 	 */
-	public static H2DatabaseInitializer initDB(String... sqlFileNames) {
+	public static H2DatabaseInitializer runSQLScript(String... sqlFileNames) {
 		try {
 			String pathForCurrentClass = currentClass.getPackage().getName().replaceAll("\\.", "/") + "/";
 			callScripts(pathForCurrentClass, sqlFileNames);
@@ -57,7 +43,7 @@ public class H2DatabaseInitializer {
 	 *
 	 * @param sqlFileNames The names of the SQL files to be executed. Path names assume a base path in the 'h2testdata' folder.
 	 */
-	public static H2DatabaseInitializer initDBFromResources(String... sqlFileNames) {
+	public static H2DatabaseInitializer runSQLScriptFromResources(String... sqlFileNames) {
 		callScripts(DB_RESOURCE_FOLDER, sqlFileNames);
 		return new H2DatabaseInitializer();
 	}
@@ -94,7 +80,7 @@ public class H2DatabaseInitializer {
 	 *
 	 * @param sqlFileNames The names of the SQL files to be executed. Path names assume a base path in the 'h2testdata' folder.
 	 */
-	public H2DatabaseInitializer thenInitDB(String... sqlFileNames) {
+	public H2DatabaseInitializer thenRunSQLScript(String... sqlFileNames) {
 		try {
 			String pathForCurrentClass = currentClass.getPackage().getName().replaceAll("\\.", "/") + "/";
 			callScripts(pathForCurrentClass, sqlFileNames);
@@ -109,7 +95,7 @@ public class H2DatabaseInitializer {
 	 *
 	 * @param sqlFileNames The names of the SQL files to be executed. Path names assume a base path in the 'h2testdata' folder.
 	 */
-	public H2DatabaseInitializer thenInitDBFromResources(String... sqlFileNames) {
+	public H2DatabaseInitializer thenRunSQLScriptFromResources(String... sqlFileNames) {
 		callScripts(DB_RESOURCE_FOLDER, sqlFileNames);
 		return this;
 	}
@@ -121,4 +107,5 @@ public class H2DatabaseInitializer {
 		callScripts(DB_RESOURCE_FOLDER, "truncate");
 		return this;
 	}
+
 }

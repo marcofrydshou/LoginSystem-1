@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
 	private long id;
@@ -15,9 +14,16 @@ public class UserDTO {
 	private String email;
 	private String authority;
 
-	public UserDTO(long id, String username, String email, String authority) {
+	public UserDTO(long id, String username, String password, String email, String authority) {
 		this.id = id;
 		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.authority = authority;
+	}
+	public UserDTO(String username, String password, String email, String authority) {
+		this.username = username;
+		this.password = password;
 		this.email = email;
 		this.authority = authority;
 	}

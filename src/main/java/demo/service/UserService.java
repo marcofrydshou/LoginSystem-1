@@ -5,10 +5,12 @@ import java.util.List;
 import demo.exception.DataIntegrityViolationException;
 import demo.exception.NoRolesFoundException;
 import demo.model.User;
+import org.springframework.stereotype.Service;
 
 /**
  * Service interface of User
  */
+@Service
 public interface UserService  {
 
 	User findUserById(long id);

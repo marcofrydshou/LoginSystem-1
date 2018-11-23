@@ -1,0 +1,32 @@
+server:
+  port: 8888
+
+spring:
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+      show-sql: false
+  datasource:
+    data: "classpath:/db/test-data.sql"
+    sql-script-encoding: "UTF-8"
+    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
+    username: h2
+    password: h2
+    driver-class-name: org.h2.Driver
+  test:
+    database:
+      replace: none
+  mail:
+    host: smtp.gmail.com
+    default-encoding: UTF-8
+    username: test@no.dk
+    password: test
+    protocol: smtp
+    port: 587
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true

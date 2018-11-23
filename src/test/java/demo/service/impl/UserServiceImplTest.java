@@ -10,12 +10,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import lombok.extern.slf4j.Slf4j;
 
-import demo.config.TestApplicationConfig;
 import demo.model.User;
 
 @Slf4j
 @ActiveProfiles("test")
-@TestApplicationConfig
 @RunWith(SpringJUnit4ClassRunner.class)
 public class UserServiceImplTest {
 

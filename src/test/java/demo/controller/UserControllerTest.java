@@ -1,11 +1,14 @@
 package demo.controller;
 
-import static org.junit.Assert.*;
-
-import java.util.*;
-
-import javax.transaction.Transactional;
-
+import demo.config.H2DatabaseInitializer;
+import demo.config.TestApplicationConfig;
+import demo.exception.NoRolesFoundException;
+import demo.model.Role;
+import demo.model.User;
+import demo.model.dto.UserDTO;
+import demo.repository.RoleRepository;
+import demo.repository.UserRepository;
+import demo.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,13 +22,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import lombok.extern.slf4j.Slf4j;
 
-import demo.config.TestApplicationConfig;
-import demo.exception.NoRolesFoundException;
-import demo.model.Role;
-import demo.model.User;
-import demo.model.dto.UserDTO;
-import demo.repository.RoleRepository;
-import demo.repository.UserRepository;
+import javax.transaction.Transactional;
+import java.util.Collections;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
+import static org.junit.Assert.*;
+
 
 @Slf4j
 @ActiveProfiles("test")
@@ -33,42 +36,52 @@ import demo.repository.UserRepository;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class UserControllerTest {
 
-	@Autowired
-	private UserRepository userRepository;
-	@Autowired
-	private UserController userController;
-	@Autowired
-	private RoleRepository roleRepository;
-	@Autowired
-	private PasswordEncoder encoder;
+    @Autowired
+    private UserController userController;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private RoleRepository roleRepository;
+    @Autowired
+    private PasswordEncoder encoder;
 
-	private User stubUser;
-	private Role role;
+    private User fooUser;
+
 
 	@Before
 	public void setUp() {
-		role = roleRepository.getOne(100l);
-		stubUser = new User(100, "testName", "testUsername", "test@dk.dk", "testPassword", "testAddress", true, Collections.singletonList(role));
-		Authentication auth = new UsernamePasswordAuthenticationToken(stubUser, null);
-		SecurityContextHolder.getContext().setAuthentication(auth);
+	    // create 5 users in h2 database from the script
+        H2DatabaseInitializer.truncate().thenRunSQLScriptFromResources("test-data");
+        // create a new authenticated user and save the suer into securitycontextholder
+        Role role = roleRepository.getOne(100l);
+        fooUser = new User("fooUsername", "fooPass", "foo@dk.dk",true,Collections.singletonList(role));
+        Authentication auth = new UsernamePasswordAuthenticationToken(fooUser, null);
+        SecurityContextHolder.getContext().setAuthentication(auth);
 	}
+
 
 	@Test
 	public void fail() {
 		throw new RuntimeException("Test Failure method");
 	}
 
+
 	@Test
 	@Transactional
 	public void createUser() throws NoRolesFoundException {
-		// create a new user
-		UserDTO newUser = new UserDTO(100,"testUser","test@dk.dk","SUPERUSER" );
+
+	    // create new user
+        // HINT! change @GeneratedValue(strategy = GenerationType.IDENTITY) to @GeneratedValue
+		UserDTO newUser = new UserDTO("testUser","testPass","test@dk.dk","SUPERUSER" );
 		userController.createUser(newUser);
 
 		// find the created usesr by username
 		User createdUser = userRepository.findByUsernameAndEnabledIsTrue("testUser").get();
 
-		// log the user email and BCrypt password
+
+		// debugging
 		log.info("CREATED USER'S EMAIL->: "+createdUser.getEmail());
 		log.info("CREATED USER'S PASSWORD->: "+ createdUser.getPassword());
 
@@ -80,11 +93,12 @@ public class UserControllerTest {
 		assertTrue(encoder.matches("testPass",createdUser.getPassword()));
 	}
 
+
 	@Test(expected = NoSuchElementException.class)
 	@Transactional
 	public void delteUser(){
 		// save stubUser and check the user exists
-		userRepository.save(stubUser);
+		userRepository.save(fooUser);
 		Optional<User> userOptional = userRepository.findByUsernameAndEnabledIsTrue("testUsername");
 		assertNotNull(userOptional.get());
 
@@ -95,6 +109,5 @@ public class UserControllerTest {
 		Optional<User> userOptional2 = userRepository.findByIdAndEnabledIsTrue(100);
 		userOptional2.get();
 	}
-
 
 }

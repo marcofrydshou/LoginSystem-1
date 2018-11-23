@@ -46,6 +46,7 @@ public class UserController {
 					.map( u -> new UserDTO(
 							u.getId(),
 							u.getUsername(),
+							u.getPassword(),
 							u.getEmail(),
 							u.getAuthoritites().stream()
 								.map(i-> i.getAuthority()).findFirst().get())
@@ -76,26 +77,26 @@ public class UserController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) throws NoRolesFoundException {
 
-		// get user details from SecurityContextHolder
-		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		// check the user has authentication
+        User auth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<Role> authorities = (List<Role>)auth.getAuthorities();
+        List<String> roles = authorities.stream().map(Role::getAuthority).collect(Collectors.toList());
 
-		if(userDTO.getAuthority().equals("ADMIN") || userDTO.getAuthority().equals("SUPERUSER")){
-			if (!hasAdminCreationAuthority(userDTO)) {
-				Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-				log.debug("User ({}) attempted to access /create endpoint with authority ({}).", auth.getPrincipal().toString(), auth.getAuthorities().toString());
-				throw new AuthorizationServiceException("User '%s' not authorized for this action.");
-			}
-		}
-		if(user.getAuthorities().contains("ADMIN") || user.getAuthorities().contains("SUPERUSER") ){
+		if(roles.contains("ADMIN") || roles.contains("SUPERUSER") ){
 			log.debug("create: {Username: '{}'}", userDTO.getUsername());
 			User createdUser = userService.createNewUser(
 					userDTO.getUsername(),
 					userDTO.getPassword(),
 					userDTO.getEmail(),
 					Collections.singletonList(userDTO.getAuthority()));
+			log.info("CREATED USER->" + createdUser);
+
 			return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
 		}
-		return new ResponseEntity<>(userDTO, HttpStatus.BAD_REQUEST);
+		else{
+            log.debug("User ({}) attempted to access /create endpoint with authority ({}).", auth.getAuthorities().toString());
+            throw new AuthorizationServiceException("User '%s' not authorized for this action.");
+        }
 
 	}
 
