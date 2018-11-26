@@ -46,29 +46,17 @@ public class PasswordResetServiceImpl implements PasswordResetService {
 
 	@Override
 	public void sendPasswordResetEmail(User user) {
-		// random token id saved in db
+
 		String generatedToken = generatePasswordResetToken(user);
 
-		// generate a string of email format with given a user and token
 		String emailTemplate = generateResetPasswordEmail(user, generatedToken);
 
 		try {
-
 			mailUtil.sendPasswordResetEmail(user.getEmail(), emailTemplate);
 
 		} catch (MessagingException e) {
 			throw new IllegalArgumentException("Could not send to the user with given user information {}");
 		}
-	}
-
-	@Override
-	public void updatePassword(User user, String newPassword) {
-		// remove the token from db by given user
-		tokenRepository.deleteByUser(user);
-
-		// set new encoded password and save in db
-		user.setPassword(encoder.encode(newPassword));
-		userRepository.save(user);
 	}
 
 	@Override
@@ -104,6 +92,17 @@ public class PasswordResetServiceImpl implements PasswordResetService {
 			log.error("User ({}) found by ID, but token does not match.", user.getUsername());
 			throw new BusinessException("Invalid token");
 		}
+	}
+
+	@Override
+	public void updatePassword(User user, String newPassword) {
+
+		// remove the token from db by given user
+		tokenRepository.deleteByUser(user);
+
+		// set new encoded password and save in db
+		user.setPassword(encoder.encode(newPassword));
+		userRepository.save(user);
 	}
 
 	private String generateResetPasswordEmail(User user, String token) {

@@ -43,17 +43,21 @@ public class PasswordResetController {
     @Transactional
     @GetMapping(value = "/reset/{user_id}/{token}")
     public ResponseEntity<ApiResponseDTO> receivePasswordReset(@PathVariable(name = "user_id") Integer userId, @PathVariable(name = "token") String token) throws BusinessException {
+
         if (userId <= 0) {
             log.info("receivePasswordReset called with invalid user ID ({})", userId);
             throw new BusinessException("receivePasswordReset called with invalid user ID");
         }
+
         if (StringUtils.isEmpty(token) || token.length() < 30) {
             log.info("receivePasswordReset called with invalid token");
             throw new BusinessException("receivePasswordReset called with invalid token");
         }
 
         log.info("receivePasswordReset called for user with ID ({})", userId);
+
         try {
+            // validate the userId and token if exists
             passwordResetService.validateToken(userId, token);
         } catch (Exception e) {
             throw new BusinessException("PasswordResetToken invalid.");
@@ -65,14 +69,21 @@ public class PasswordResetController {
     @Transactional
     @PostMapping(value = "/update")
     public ResponseEntity<ApiResponseDTO> updatePassword(@RequestBody ResetPasswordForm passwordForm) throws BusinessException {
+
         log.info("updatePassword: (ID : '{}')", passwordForm.getId());
 
+        // find the user by the given id
         User requestedUser = userService.findUserById(passwordForm.getId());
+
+        // throw an exception if two passwords not match
         if (!passwordForm.getPassword().equals(passwordForm.getConfirmPassword())) {
             throw new BusinessException("Passwords do not match.");
         }
 
+        // check if the found user has authority
         if (requestedUser.hasAuthority("CHANGE_PASSWORD_PRIVILEGE")) {
+
+            // deleted the token related to the user and saved the new password
             passwordResetService.updatePassword(requestedUser, passwordForm.getPassword());
         }
 
