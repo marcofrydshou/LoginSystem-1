@@ -3,6 +3,7 @@ package demo.controller;
 import demo.exception.BusinessException;
 import demo.model.User;
 import demo.model.dto.ApiResponseDTO;
+import demo.model.dto.ResetPasswordForm;
 import demo.model.dto.ResetPasswordSendForm;
 import demo.service.PasswordResetService;
 import demo.service.UserService;
@@ -60,4 +61,22 @@ public class PasswordResetController {
 
         return new ResponseEntity<>(new ApiResponseDTO(HttpStatus.OK, String.valueOf(userId)), HttpStatus.OK);
     }
+
+    @Transactional
+    @PostMapping(value = "/update")
+    public ResponseEntity<ApiResponseDTO> updatePassword(@RequestBody ResetPasswordForm passwordForm) throws BusinessException {
+        log.info("updatePassword: (ID : '{}')", passwordForm.getId());
+
+        User requestedUser = userService.findUserById(passwordForm.getId());
+        if (!passwordForm.getPassword().equals(passwordForm.getConfirmPassword())) {
+            throw new BusinessException("Passwords do not match.");
+        }
+
+        if (requestedUser.hasAuthority("CHANGE_PASSWORD_PRIVILEGE")) {
+            passwordResetService.updatePassword(requestedUser, passwordForm.getPassword());
+        }
+
+        return new ResponseEntity<>(new ApiResponseDTO(HttpStatus.OK, "ok"), HttpStatus.OK);
+    }
+
 }

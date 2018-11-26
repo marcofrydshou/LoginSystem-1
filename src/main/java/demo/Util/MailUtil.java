@@ -18,7 +18,8 @@ public class MailUtil {
         this.mailSender = mailSender;
     }
 
-    public void sendPasswordResetEmail(String email, String messageTemplate, long userId, String token) throws MessagingException {
+    public void sendPasswordResetEmail(String email, String messageTemplate) throws MessagingException {
+
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 

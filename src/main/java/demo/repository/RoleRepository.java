@@ -15,9 +15,10 @@ import demo.model.Role;
 public interface RoleRepository extends JpaRepository<Role, Long> {
 
 	/**
+	 * Find authorities by checking every single authority of the given list
 	 *
-	 * @param authorities
-	 * @return
+	 * @param authorities a list of string
+	 * @return a list of role entities
 	 */
 	List<Role> findByAuthorityIn(List<String> authorities);
 

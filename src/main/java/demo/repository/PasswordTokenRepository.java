@@ -14,22 +14,27 @@ import demo.model.User;
  */
 @Repository
 public interface PasswordTokenRepository extends JpaRepository<PasswordResetToken, Long> {
+
 	/**
+	 * Find the token belongs to the given user
 	 *
-	 * @param user
-	 * @return
+	 * @param user the user which is token belongs to
+	 * @return Optional of token
 	 */
 	Optional<PasswordResetToken> findByUser(User user);
 
 	/**
+	 * Delete the token by given user
 	 *
-	 * @param user
+	 * @param user the user needs to be delete token
 	 */
 	void deleteByUser(User user);
 
 	/**
+	 * Delete the token by given time
 	 *
-	 * @param currentTime
+	 * @param currentTime the time, token needs to be delete
 	 */
 	void deleteByExpiryDateBefore(LocalDateTime currentTime);
+
 }

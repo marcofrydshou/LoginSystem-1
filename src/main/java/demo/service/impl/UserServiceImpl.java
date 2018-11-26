@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
 				user.setUsername(newUsername);
 			}
 			if(newPassword != null){
-				user.setPassword(newPassword);
+				user.setPassword(encoder.encode(newPassword));
 			}
 			if(newEmail != null){
 				user.setEmail(newEmail);

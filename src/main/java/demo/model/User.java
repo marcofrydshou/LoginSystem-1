@@ -7,6 +7,7 @@ import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,6 +37,7 @@ public class User implements UserDetails {
 
     @Column(name = "email", unique = true)
     private String email;
+
 
     @Column(name = "address")
     private String address;

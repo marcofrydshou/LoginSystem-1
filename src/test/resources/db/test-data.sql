@@ -1,6 +1,6 @@
 INSERT INTO users ( id, address, email, enabled, name, password, username )
 VALUES
-(100, 'test address1', 'test1@test.dk', true, 'test user1', '$2a$10$grY5ADKN2.2yLv2ZW5F0MuHMZZy3vYYdgWLMAYAGDa3qoEK9FqhP6', 'admin'), -- Pass is '123'
+(100, 'test address1', 'testxu2018@gmail.com', true, 'test user1', '$2a$10$grY5ADKN2.2yLv2ZW5F0MuHMZZy3vYYdgWLMAYAGDa3qoEK9FqhP6', 'admin'), -- Pass is '123'
 (200, 'test address2', 'test2@test.dk', true, 'test user2', '$2a$10$grY5ADKN2.2yLv2ZW5F0MuHMZZy3vYYdgWLMAYAGDa3qoEK9FqhP6', 'super'),
 (300, 'test address3', 'test3@test.dk', true, 'test user3', '$2a$10$grY5ADKN2.2yLv2ZW5F0MuHMZZy3vYYdgWLMAYAGDa3qoEK9FqhP6', 'user'),
 (400, 'test address4', 'test4@test.dk', true, 'test user4', '$2a$10$grY5ADKN2.2yLv2ZW5F0MuHMZZy3vYYdgWLMAYAGDa3qoEK9FqhP6', 'test1'),

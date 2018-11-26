@@ -49,26 +49,38 @@ public class PasswordResetServiceImpl implements PasswordResetService {
 		// random token id saved in db
 		String generatedToken = generatePasswordResetToken(user);
 
+		// generate a string of email format with given a user and token
 		String emailTemplate = generateResetPasswordEmail(user, generatedToken);
 
 		try {
-			mailUtil.sendPasswordResetEmail(user.getEmail(), emailTemplate, user.getId(), generatedToken);
+
+			mailUtil.sendPasswordResetEmail(user.getEmail(), emailTemplate);
+
 		} catch (MessagingException e) {
-			throw new IllegalArgumentException("");
+			throw new IllegalArgumentException("Could not send to the user with given user information {}");
 		}
 	}
 
 	@Override
 	public void updatePassword(User user, String newPassword) {
+		// remove the token from db by given user
 		tokenRepository.deleteByUser(user);
+
+		// set new encoded password and save in db
 		user.setPassword(encoder.encode(newPassword));
 		userRepository.save(user);
 	}
 
 	@Override
 	public String generatePasswordResetToken(User user) {
+
+		// create an instance of PasswordResetToken by given random id, time from now, and the user
 		PasswordResetToken resetPasswordResetToken = new PasswordResetToken(UUID.randomUUID().toString(), LocalDateTime.now(), user);
+
+		// save the token in db
 		tokenRepository.save(resetPasswordResetToken);
+
+		// return the token
 		return resetPasswordResetToken.getToken();
 	}
 
@@ -77,21 +89,21 @@ public class PasswordResetServiceImpl implements PasswordResetService {
 
 		User user = userRepository.findByIdAndEnabledIsTrue(userId).orElseThrow( ()-> new UsernameNotFoundException("User not found with provied ID"));
 
-		tokenRepository.findByUser(user).orElseThrow( ()-> new UsernameNotFoundException("PasswordResetToken not found with the user"));
+		PasswordResetToken userToken = tokenRepository.findByUser(user).orElseThrow( ()-> new UsernameNotFoundException("PasswordResetToken not found with the user"));
 
-		/*LocalDateTime expiryDate = userPasswordResetToken.getExpiryDate();
+		LocalDateTime expiryDate = userToken.getExpiryDate();
 		long minutes = ChronoUnit.MINUTES.between(expiryDate, LocalDateTime.now());
 		if (minutes >= 30) {
 			throw new BusinessException("PasswordResetToken has expired.");
 		}
-		if (userPasswordResetToken.getToken() != null && userPasswordResetToken.getToken().equals(token)) {
+		if (userToken.getToken() != null && userToken.getToken().equals(token)) {
 			Role passwordRole = roleRepository.findByAuthority("CHANGE_PASSWORD_PRIVILEGE");
 			user.addAuthority(passwordRole);
 			userRepository.save(user);
 		} else {
 			log.error("User ({}) found by ID, but token does not match.", user.getUsername());
 			throw new BusinessException("Invalid token");
-		}*/
+		}
 	}
 
 	private String generateResetPasswordEmail(User user, String token) {
@@ -110,6 +122,5 @@ public class PasswordResetServiceImpl implements PasswordResetService {
 
 		return String.format(EMAIL_RESET_USER_BODY, endpoint);
 	}
-
 
 }
