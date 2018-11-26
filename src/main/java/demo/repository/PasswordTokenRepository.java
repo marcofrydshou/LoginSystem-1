@@ -3,20 +3,23 @@ package demo.repository;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import demo.model.PasswordResetToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import demo.model.Token;
 import demo.model.User;
 
+/**
+ * Repository interface of PasswordTokenRepository
+ */
 @Repository
-public interface PasswordTokenRepository extends JpaRepository<Token, Long> {
+public interface PasswordTokenRepository extends JpaRepository<PasswordResetToken, Long> {
 	/**
 	 *
 	 * @param user
 	 * @return
 	 */
-	Optional<Token> findByUser(User user);
+	Optional<PasswordResetToken> findByUser(User user);
 
 	/**
 	 *

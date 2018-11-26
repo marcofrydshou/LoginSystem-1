@@ -1,5 +1,6 @@
 package demo.service;
 
+import demo.exception.BusinessException;
 import demo.model.User;
 
 /**
@@ -11,5 +12,7 @@ public interface PasswordResetService {
 
 	String generatePasswordResetToken(User user);
 
-	void validateToken(long userId, String token);
+	void validateToken(long userId, String token) throws BusinessException;
+
+	void sendPasswordResetEmail(User user);
 }

@@ -50,7 +50,7 @@ public class JwtValidator {
 			user = userService.findUserById((userId));
 		}
 		catch (Exception e){
-			throw new UnsupportedJwtException("JWT Token is missing"+ e);
+			throw new UnsupportedJwtException("JWT PasswordResetToken is missing"+ e);
 		}
 		return user;
 	}

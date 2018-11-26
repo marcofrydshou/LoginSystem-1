@@ -7,3 +7,21 @@ spring:
   resources:
     chain:
       enabled: true
+  mail:
+    host: smtp.gmail.com
+    default-encoding: UTF-8
+    username: testxu2018@gmail.com
+    password: 4c#IIE8hClgYu0C
+    protocol: smtp
+    port: 587
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true
+
+
+app:
+  url:
+    passwordReset: http://localhost:8888/api/password/reset/

@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -45,7 +43,7 @@ public class JwtAuthenticationProvider extends AbstractUserDetailsAuthentication
 		User user = validator.validate(token);
 
 		if(user == null){
-			throw new RuntimeException("JWT Token is incorrect");
+			throw new RuntimeException("JWT PasswordResetToken is incorrect");
 		}
 
 		return new User(user.getUsername(),user.getPassword(),user.getEmail(), user.isEnabled(),user.getAuthoritites());

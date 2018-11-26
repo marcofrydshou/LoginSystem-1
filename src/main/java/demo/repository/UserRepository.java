@@ -22,12 +22,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	Optional<User> findByIdAndEnabledIsTrue(long userId);
 
 	/**
-	 * Find all enabled users
-	 * @return a list of exists users
-	 */
-	List<User> findUserByEnabledIsTrue();
-
-	/**
 	 * Find a exists user with given username
 	 * @param username
 	 * @return  a user with the given username
@@ -36,16 +30,17 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	/**
 	 * Find a enabled user with given email
+	 *
 	 * @param email user's email
 	 * @return a user with the given email
 	 */
-	Optional<User> findByEmailAndEnabledIsTrue(String email);
+	Optional<User> findByEmailIgnoreCase(String email);
 
 	/**
-	 * Find a enabled user withen given name
-	 * @param name the user's name
-	 * @return a container object with user
+	 * Find all enabled users
+	 *
+	 * @return a list of exists users
 	 */
-	Optional<User> findByNameAndEnabledIsTrue(String name);
+	List<User> findUsersByEnabledIsTrue();
 
 }

@@ -100,10 +100,12 @@ public class UserControllerTest {
 		// save stubUser and check the user exists
 		userRepository.save(fooUser);
 		Optional<User> userOptional = userRepository.findByUsernameAndEnabledIsTrue("testUsername");
+		UserDTO userDTO = new UserDTO();
+		userDTO.setId(userOptional.get().getId());
 		assertNotNull(userOptional.get());
 
 		// delete the user with user id
-		userController.deleteUser(userOptional.get().getId());
+		userController.deleteUser(userDTO);
 
 		// find the deleted user and will throw NosuchElementException
 		Optional<User> userOptional2 = userRepository.findByIdAndEnabledIsTrue(100);

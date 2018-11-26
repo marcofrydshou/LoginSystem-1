@@ -1,6 +1,8 @@
 package demo.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,27 +36,6 @@ public class UserServiceImpl implements UserService {
 		this.encoder = encoder;
 	}
 
-	@Override
-	public List<User> findEnabledUsers() {
-		log.info("Find all enabled users");
-		return userRepository.findUserByEnabledIsTrue();
-	}
-
-	@Override
-	public User findUserById(long userId) {
-		User user = new User();
-		try{
-			Optional<User> optionalUser = userRepository.findByIdAndEnabledIsTrue(userId);
-			if(optionalUser.isPresent()){
-				user = optionalUser.get();
-			}
-		}
-		catch (DataIntegrityViolationException e){
-			log.debug("Error accourced from findUserById {userId} " + userId);
-			e.printStackTrace();
-		}
-		return user;
-	}
 
 	@Override
 	public User createNewUser(String username, String password, String email, List<String> roles) throws NoRolesFoundException,DataIntegrityViolationException {
@@ -76,32 +57,61 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void updateUser(long userId, User userInfo) throws DataIntegrityViolationException {
-		try{
-			Optional<User> optionalFetchedUser = userRepository.findById(userId);
-			if(optionalFetchedUser.isPresent()){
-				User fetchedUser = optionalFetchedUser.get();
-				fetchedUser.setName(userInfo.getName());
-				fetchedUser.setAddress(userInfo.getAddress());
-				fetchedUser.setEmail(userInfo.getEmail());
-				fetchedUser.setPassword(userInfo.getPassword());
-				fetchedUser.setEnabled(userInfo.isEnabled());
-				userRepository.save(fetchedUser);
-				if (userId <= 0) {
-					throw new NullPointerException("User ID is invalid.");
-				}
+	public User updateUser(long userId, String newName, String newUsername, String newPassword, String newEmail,String newAddress, List<String> newRoles) throws NoRolesFoundException {
+			// find the exists user by given user id
+			Optional<User> userOptional = userRepository.findById(userId);
 
+			User user = userOptional.orElseThrow( () -> new UsernameNotFoundException("Provided user ID not found."));
+
+			if(newName != null){
+				user.setName(newName);
 			}
-		}
-		catch (NullPointerException e){
-			throw new NullPointerException(String.format("User not found with given id (%s)", userId));
-		}
+			if(newUsername != null){
+				user.setUsername(newUsername);
+			}
+			if(newPassword != null){
+				user.setPassword(newPassword);
+			}
+			if(newEmail != null){
+				user.setEmail(newEmail);
+			}
+			if(newAddress != null){
+				user.setAddress(newAddress);
+			}
+			if(newRoles != null){
+				List<Role> authorityEntities = roleRepository.findByAuthorityIn(newRoles);
+				if(authorityEntities.isEmpty()){
+					throw new NoRolesFoundException("No roles found for given role names.");
+				}
+				user.setAuthoritites(authorityEntities);
+			}
+			userRepository.save(user);
+
+		return user;
 	}
 
+	@Override
 	public void deleteUser(long userId) throws DataIntegrityViolationException {
 		Optional<User> userToDelete = userRepository.findById(userId);
 		userToDelete.orElseThrow( ()-> new UsernameNotFoundException("Provided user not found."));
 		userRepository.delete(userToDelete.get());
+	}
+
+
+	@Override
+	public User findUserById(long userId) {
+		User user = new User();
+		try{
+			Optional<User> optionalUser = userRepository.findByIdAndEnabledIsTrue(userId);
+			if(optionalUser.isPresent()){
+				user = optionalUser.get();
+			}
+		}
+		catch (DataIntegrityViolationException e){
+			log.debug("Error accourced from findUserById {userId} " + userId);
+			e.printStackTrace();
+		}
+		return user;
 	}
 
 	@Override
@@ -124,13 +134,13 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User findByEmail(String email) throws DataIntegrityViolationException  {
-		log.debug("Find user with given email: " + email);
+		log.debug("Find user by given email: " + email);
 		try {
 			if (email == null) {
 				throw new DataIntegrityViolationException("Email is null");
 			}
 			log.info("Find user with given email: " + email);
-			Optional<User> optionalUser = userRepository.findByEmailAndEnabledIsTrue(email);
+			Optional<User> optionalUser = userRepository.findByEmailIgnoreCase(email);
 			return optionalUser.orElseThrow(() -> new DataIntegrityViolationException("No user for this email: " + email));
 		}
 		catch (Exception e){
@@ -147,9 +157,28 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void save(User user) {
-		userRepository.save(user);
+	public List<User> findEnabledUsers() throws NoSuchElementException {
+		List<User> users;
+
+		try{
+			log.info("Find all enabled users");
+			users = userRepository.findUsersByEnabledIsTrue();
+		}
+		catch (NoSuchElementException e){
+			throw new NoSuchElementException("No value present");
+		}
+		return users;
 	}
 
+	@Override
+	public void save(User user) {
+		try{
+			log.info("Save the given user");
+			userRepository.save(user);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+	}
 
 }

@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "password_token")
-public class Token {
+public class PasswordResetToken {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +43,7 @@ public class Token {
 		modified = LocalDateTime.now();
 	}
 
-	public Token(String token, LocalDateTime expiryDate, User user) {
+	public PasswordResetToken(String token, LocalDateTime expiryDate, User user) {
 		this.token = token;
 		this.expiryDate = expiryDate;
 		this.user = user;

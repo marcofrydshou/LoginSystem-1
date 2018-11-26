@@ -30,12 +30,12 @@ import demo.security.JwtSuccessHandler;
 public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private static final String INTERNAL_PATH = "/internal/**";
-	private static final String API_PATH = "/rest/**";
+	private static final String API_PATH = "/api/**";
 	private static final String AUTHENTICATION_PATH = "/rest/authentication/**";
-	private static final String ROLE_LIST_PATH = "/rest/authentication/roles";
-	private static final String USER_ADMINISTRATION_PATH = "/rest/user/**";
-	private static final String USER_LIST_PATH = "/rest/user/all";
-	private static final String PASSWORD_RESET_REQUEST_PATH = "/rest/password/**";
+	private static final String ROLE_LIST_PATH = "/api/authentication/roles";
+	private static final String USER_ADMINISTRATION_PATH = "/api/user/**";
+	private static final String USER_LIST_PATH = "/api/user/all";
+	private static final String PASSWORD_RESET_REQUEST_PATH = "/api/password/**";
 
 
 	// Declare AuthenticationProvider

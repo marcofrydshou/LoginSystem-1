@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationResponseDTO {
+
 	private String accessToken;
 	private Long expires;
+
 }
