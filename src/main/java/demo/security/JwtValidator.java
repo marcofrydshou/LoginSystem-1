@@ -3,13 +3,11 @@ package demo.security;
 import java.time.ZoneId;
 import java.util.Date;
 
+import io.jsonwebtoken.*;
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.UnsupportedJwtException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,9 +40,6 @@ public class JwtValidator {
 					.getBody();
 
 			long userId = Long.parseLong((String)body.get("userId"));
-			String userName = body.getSubject();
-			Date currentTime = body.getIssuedAt();
-			Date exp = body.getExpiration();
 
 			// check if the userId exists in our db
 			user = userService.findUserById((userId));
@@ -53,5 +48,48 @@ public class JwtValidator {
 			throw new UnsupportedJwtException("JWT PasswordResetToken is missing"+ e);
 		}
 		return user;
+	}
+
+	public String refreshAccessToken(String accessToken) {
+
+		Claims claims = Jwts.parser()
+				.setSigningKey(secretKey)
+				.parseClaimsJws(accessToken)
+				.getBody();
+
+		return Jwts.builder()
+				.setSubject(claims.getSubject())
+				.setIssuedAt(new Date())
+				.setExpiration(DateUtils.addMinutes(new Date(), 20))
+				.signWith(SignatureAlgorithm.HS512, secretKey)
+				.compact();
+	}
+
+	public String getUsernameFromJWT(String token) {
+		Claims claims = Jwts.parser()
+				.setSigningKey(secretKey)
+				.parseClaimsJws(token)
+				.getBody();
+
+		return claims.getSubject();
+	}
+
+	public boolean validateToken(String authToken) {
+		try {
+			Jwts.parser().setSigningKey(secretKey).parseClaimsJws(authToken);
+			return true;
+		} catch (SignatureException ex) {
+			log.warn("Invalid JWT signature");
+		} catch (MalformedJwtException ex) {
+			log.warn("Invalid JWT token");
+		} catch (ExpiredJwtException ex) {
+			log.warn("Expired JWT token");
+			throw ex;
+		} catch (UnsupportedJwtException ex) {
+			log.warn("Unsupported JWT token");
+		} catch (IllegalArgumentException ex) {
+			log.warn("JWT claims string is empty.");
+		}
+		return false;
 	}
 }

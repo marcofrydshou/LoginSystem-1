@@ -23,20 +23,25 @@ import demo.security.JwtAuthenticationProvider;
 import demo.security.JwtAuthenticationTokenFilter;
 import demo.security.JwtSuccessHandler;
 
+/**
+ * Configuration of JWT Security
+ */
 @Slf4j
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
 @Configuration
 public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	private static final String INTERNAL_PATH = "/internal/**";
 	private static final String API_PATH = "/api/**";
-	private static final String AUTHENTICATION_PATH = "/rest/authentication/**";
+	private static final String AUTHENTICATION_BASE = "/api/authentication/**";
 	private static final String ROLE_LIST_PATH = "/api/authentication/roles";
 	private static final String USER_ADMINISTRATION_PATH = "/api/user/**";
 	private static final String USER_LIST_PATH = "/api/user/all";
 	private static final String PASSWORD_RESET_REQUEST_PATH = "/api/password/**";
 
+	private static final String ADMIN = "ADMIN";
+	private static final String SUPERUSER = "SUPERUSER";
+	private static final String CHANGE_PASSWORD_PRIVILEGE = "CHANGE_PASSWORD_PRIVILEGE";
 
 	// Declare AuthenticationProvider
 	@Autowired
@@ -44,7 +49,7 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private JwtAuthenticationEntryPoint entryPoint;
 
-	// Create AuthenticationManager with custom authenticationprovider, so we can write promissions
+	// Create AuthenticationManager with custom AuthenticationProvider, so we can write permissions
 	@Bean
 	public AuthenticationManager authenticationManager() {
 		return new ProviderManager(Collections.singletonList(authenticationProvider));
@@ -61,7 +66,7 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	public PasswordEncoder encoder() {
-		return new BCryptPasswordEncoder(11);
+		return new BCryptPasswordEncoder();
 	}
 
 	@Override
@@ -72,17 +77,15 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
-				.authorizeRequests().antMatchers(AUTHENTICATION_PATH).permitAll()
+				.authorizeRequests().antMatchers(PASSWORD_RESET_REQUEST_PATH).hasAuthority(CHANGE_PASSWORD_PRIVILEGE)
 				.and()
-				.authorizeRequests().antMatchers(INTERNAL_PATH).permitAll()
+				.authorizeRequests().antMatchers(USER_LIST_PATH).hasAnyAuthority(ADMIN, SUPERUSER)
 				.and()
-				.authorizeRequests().antMatchers(PASSWORD_RESET_REQUEST_PATH).permitAll()
+				.authorizeRequests().antMatchers(AUTHENTICATION_BASE).permitAll()
 				.and()
-				.authorizeRequests().antMatchers(USER_LIST_PATH).authenticated()
+				.authorizeRequests().antMatchers(USER_ADMINISTRATION_PATH).hasAuthority(ADMIN)
 				.and()
-				.authorizeRequests().antMatchers(USER_ADMINISTRATION_PATH).authenticated()
-				.and()
-				.authorizeRequests().antMatchers(ROLE_LIST_PATH).hasAnyAuthority("ADMIN", "SUPERUSER")
+				.authorizeRequests().antMatchers(ROLE_LIST_PATH).hasAnyAuthority(ADMIN, SUPERUSER)
 				.and()
 				.authorizeRequests().antMatchers(API_PATH).authenticated()
 				.and()
