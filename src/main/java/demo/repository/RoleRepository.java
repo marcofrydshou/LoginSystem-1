@@ -22,6 +22,12 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
 	 */
 	List<Role> findByAuthorityIn(List<String> authorities);
 
-	Role findByAuthority(String authroity);
+	/**
+	 * Find an exists authority by given authority
+	 *
+	 * @param authority used to find the exists authority
+	 * @return the found role object
+	 */
+	Role findByAuthority(String authority);
 
 }

@@ -96,4 +96,11 @@ public interface UserService  {
 	 */
 	void save(User user);
 
+	/**
+	 * Find all authorities
+	 *
+	 * @return a list of roles
+	 */
+	List<Role> getAllRoles();
+
 }

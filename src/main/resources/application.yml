@@ -1,6 +1,6 @@
 management:
-  secutiry:
-    enabled: true
+secutiry:
+  enabled: true
 
 
 spring:
@@ -21,7 +21,8 @@ spring:
             enable: true
           auth: true
 
-
 app:
   url:
     passwordReset: http://localhost:8888/api/password/reset/
+  cron:
+    passwordResetCleanup: 0 0/1 * * * ?

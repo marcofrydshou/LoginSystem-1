@@ -42,7 +42,4 @@ public class Role implements GrantedAuthority {
 		modified = LocalDateTime.now();
 	}
 
-	public Role(String authority) {
-		this.authority = authority;
-	}
 }

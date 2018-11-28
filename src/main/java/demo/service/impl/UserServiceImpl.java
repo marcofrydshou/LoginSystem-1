@@ -181,4 +181,9 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	@Override
+	public List<Role> getAllRoles() {
+		return roleRepository.findAll();
+	}
+
 }
