@@ -21,13 +21,13 @@ public class JwtGenerator {
 	public String generate(User user) {
 
 		final Date currentTime = new Date();
-		final Date expiry = DateUtils.addMinutes(currentTime, 20);
+		final Date expiry = DateUtils.addHours(currentTime, 24);
 
 		// issuer means who is the issuer, subject means the token belongs to
 		Claims claims = Jwts.claims()
 				.setIssuer("LoginSystem")
 				.setSubject(user.getName())
-				.setIssuedAt(currentTime)
+				.setIssuedAt(new Date())
 				.setExpiration(expiry);
 		claims.put("userId",String.valueOf(user.getId()));
 		return Jwts.builder()

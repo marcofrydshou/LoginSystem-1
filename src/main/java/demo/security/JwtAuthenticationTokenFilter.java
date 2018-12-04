@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
@@ -14,6 +15,8 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import lombok.extern.slf4j.Slf4j;
 
 import demo.model.JwtAuthenticationToken;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 /**
  * TokenFilter will be filtering out the URL's
@@ -28,24 +31,22 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
 
 	//the method authorize our requests, where we handling our request and the validating, where token will be used
 	@Override
-	public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
+	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
+		Authentication authenticatation = null;
+		try {
+			String authenticationToken = getJwtFromRequest(request);
 
-		// from httpServletRequest can get header infomations
-		String header = httpServletRequest.getHeader("Authorization");
+			// create a new instance of custom token object with the token from request
+			JwtAuthenticationToken jwt = new JwtAuthenticationToken(authenticationToken);
 
-		if( header == null || !header.startsWith("Bearer ") ){
-			throw new RuntimeException("JTW PasswordResetToken is missing");
+			// get authenticationManager from extends library
+			// then authenticating it
+			authenticatation =  getAuthenticationManager().authenticate(jwt);
 		}
-
-		// get the token from the header
-		String authenticationToken = header.substring(7);
-
-		// need to send back
-		JwtAuthenticationToken token = new JwtAuthenticationToken(authenticationToken);
-
-		// get authenticationManager from extends library
-		// then authenticating it
-		return getAuthenticationManager().authenticate(token);
+		catch (Exception e){
+			log.warn("Failed to authenticate the token", e);
+		}
+		return authenticatation;
 	}
 
 	@Override
@@ -54,4 +55,15 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
 		// block any request and response
 		chain.doFilter(request, response);
 	}
+
+	private String getJwtFromRequest(HttpServletRequest request){
+
+		String bearerToken = request.getHeader(AUTHORIZATION);
+
+		if( StringUtils.isNotBlank(bearerToken) && bearerToken.startsWith("Bearer ") ){
+			return bearerToken.substring(7);
+		}
+		return null;
+	}
+
 }

@@ -38,6 +38,22 @@ public class UserServiceImpl implements UserService {
 
 
 	@Override
+	public User loginUser(String emailDTO, String passwordDTO) {
+
+		Optional<User> foundUserOptional = userRepository.findByEmailIgnoreCase(emailDTO);
+
+		User user = new User();
+
+		if(foundUserOptional.isPresent()){
+			user = foundUserOptional.get();
+			if(encoder.matches(passwordDTO,user.getPassword())){
+				return user;
+			}
+		}
+		return user;
+	}
+
+	@Override
 	public User createNewUser(String username, String password, String email, List<String> roles) throws NoRolesFoundException,DataIntegrityViolationException {
 		try{
 			List<Role> authorities = roleRepository.findByAuthorityIn(roles);

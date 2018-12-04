@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 import demo.exception.DataIntegrityViolationException;
 import demo.model.dto.EditUserDTO;
+import demo.model.dto.LoginDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +36,7 @@ import demo.service.UserService;
 public class UserController {
 
 	private UserService userService;
+	private PasswordEncoder encoder;
 
 	@Autowired
 	public UserController( UserService userService){ this.userService = userService; }
@@ -52,7 +55,6 @@ public class UserController {
 					userDTO.getPassword(),
 					userDTO.getEmail(),
 					Collections.singletonList(userDTO.getAuthority()));
-			log.info("CREATED USER->" + createdUser);
 
 			return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
 		}

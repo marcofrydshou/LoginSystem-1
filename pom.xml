@@ -54,7 +54,7 @@
             <artifactId>slf4j-log4j12</artifactId>
         </dependency>
 
-        <!-- database -->
+        <!-- database (Spring Boot JDBC && PostgreSQL) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>

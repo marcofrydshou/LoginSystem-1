@@ -19,7 +19,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJMb2dpblN5c3RlbSIsInN1YiI6InRlc3QgdXNlcjEiLCJpYXQiOjE1NDIzNzQxMTUsImV4cCI6MTU0NTcxMDQwMCwidXNlcklkIjoiMTAwIn0.1Wtf0tzR51u4N1v0WL-fWHqkqlZG8BcFJ-XkqsrGzjmlOCnNZwT0W9LK6GPfVWAmFOFW4u1BNZgiM5je1cwDPQ",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJMb2dpblN5c3RlbSIsInN1YiI6InRlc3QgdXNlcjEiLCJpYXQiOjE1NDM4NTQxOTcsImV4cCI6MTU0Mzk0MDU5NywidXNlcklkIjoiMTAwIn0.fJQVMDZOtXqyqu4WC1dM2JqMbwFJI71_gQFNz7vssdZfl50sW6WDwRIbCgefoUYtGEgdwzrrXwDjRonrdXIneA",
 								"description": ""
 							},
 							{
@@ -172,7 +172,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"id\":10,\n\t\"username\": \"!NEWUSER\",\n\t\"email\": \"10000@dk.COM\",\n\t\"password\": \"222\",\n\t\"authority\":\"USER\"\n}"
+							"raw": "{\n\t\"id\":100,\n\t\"username\": \"admin\",\n\t\"email\": \"testxu2018@gmail.com\",\n\t\"password\": \"4c#IIE8hClgYu0C\",\n\t\"authority\":\"ADMIN\"\n}"
 						},
 						"description": ""
 					},
@@ -197,7 +197,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\t\"id\": 11,\n        \"username\": \"createuser\",\n        \"password\": \"$2a$11$B35qnWLMWUVK8aaRKjk8ruBt7UcyWUur.zqaDHwTs9fwSNfKZzRfa\",\n        \"email\": \"creatuser@dk.dk\",\n        \"authority\": \"ADMIN\"\n}"
+							"raw": "{\n\t\t\"id\": 13,\n        \"username\": \"createuser\",\n        \"password\": \"$2a$11$B35qnWLMWUVK8aaRKjk8ruBt7UcyWUur.zqaDHwTs9fwSNfKZzRfa\",\n        \"email\": \"creatuser@dk.dk\",\n        \"authority\": \"ADMIN\"\n}"
 						},
 						"description": ""
 					},
@@ -246,6 +246,26 @@
 						"description": ""
 					},
 					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"url": "http://localhost:8888/login/register",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"NEWUSER\",\n\t\"email\": \"10000@dk.dk\",\n\t\"password\": \"123\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
 				}
 			]
 		},
@@ -261,7 +281,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJMb2dpblN5c3RlbSIsInN1YiI6InRlc3QgdXNlcjEiLCJpYXQiOjE1NDMyMzYwNzAsImV4cCI6MTU0MzIzNzI3MCwidXNlcklkIjoiMTAwIn0.2se8TUCuKQ3tYOECVEDIBotiCGwDwMKAO3Yj5Qkj_4VIuteSyiO8YknDOj1QRIfM-J6_IbozlVAnXN47-Ee5Vg",
+								"value": "Bearer ",
 								"description": ""
 							},
 							{
@@ -338,12 +358,6 @@
 						"method": "POST",
 						"header": [
 							{
-								"key": "Authorization",
-								"value": "Token  eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJMb2dpblN5c3RlbSIsInN1YiI6InRlc3QgdXNlcjEiLCJpYXQiOjE1NDIzNzQxMTUsImV4cCI6MTU0NTcxMDQwMCwidXNlcklkIjoiMTAwIn0.1Wtf0tzR51u4N1v0WL-fWHqkqlZG8BcFJ-XkqsrGzjmlOCnNZwT0W9LK6GPfVWAmFOFW4u1BNZgiM5je1cwDPQ",
-								"description": "",
-								"disabled": true
-							},
-							{
 								"key": "Content-Type",
 								"value": "application/json",
 								"description": ""
@@ -351,27 +365,58 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"id\":300,\n\t\"name\": \"test user3\"\n}"
+							"raw": "{\n\t\"id\":100,\n\t\"name\": \"test user1\"\n}"
 						},
 						"description": ""
 					},
 					"response": []
 				},
 				{
-					"name": "Login with user credentials and create jwt",
+					"name": "Login and create JTW",
 					"request": {
-						"url": "http://localhost:8888/api/authentiacation/token",
+						"url": "http://localhost:8888/login/token",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
 								"value": "application/json",
 								"description": ""
+							},
+							{
+								"key": "",
+								"value": "",
+								"description": "",
+								"disabled": true
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"username\":\"admin\",\n\t\"password\":\"123\"\n}"
+							"raw": "{\n\t\"email\":\"testxu2018@gmail.com\",\n\t\"password\":\"4c#IIE8hClgYu0C\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get current user informations",
+					"request": {
+						"url": "http://localhost:8888/login/principal",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh JTW",
+					"request": {
+						"url": "http://localhost:8888/login/refresh",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJMb2dpblN5c3RlbSIsInN1YiI6InRlc3QgdXNlcjEiLCJpYXQiOjE1NDM4NTkwMzYsImV4cCI6MTU0Mzk0NTQzNiwidXNlcklkIjoiMTAwIn0.r-2SfiBPX3ZWZg8r6sq7Q-pY_98tyWw_rpZrKvkXU1EuEdQQ_n65IVt8eplPrv_ZOvuyQFHg8tzD_bgYM42PTA"
 						},
 						"description": ""
 					},

@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 @Service
 public interface UserService  {
 
+	User loginUser(String email, String password);
+
 	/**
 	 * Create new user with those five params
 	 *

@@ -1,5 +1,6 @@
 package demo.controller;
 
+import demo.exception.NoRolesFoundException;
 import demo.model.Role;
 import demo.model.User;
 import demo.model.dto.AuthenticationResponseDTO;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,12 +24,15 @@ import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/api/authentication")
+@RequestMapping(value = "/login")
 public class AuthentationController {
 
     private JwtGenerator jwtGenerator;
@@ -43,33 +48,45 @@ public class AuthentationController {
         this.jwtValidator = jwtValidator;
     }
 
+    @PostMapping(value = "/register")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) throws NoRolesFoundException {
+
+        log.debug("register: {Username: '{}'}", userDTO.getUsername());
+        List<String> roles = Arrays.asList("USER");
+        userService.createNewUser(
+                userDTO.getUsername(),
+                userDTO.getPassword(),
+                userDTO.getEmail(),
+                roles);
+
+        return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
+
+    }
     @PostMapping(value = "/token")
     @Transactional
-    public ResponseEntity<AuthenticationResponseDTO> token(@Valid LoginDTO loginDTO){
+    public ResponseEntity<AuthenticationResponseDTO> token(@Valid @RequestBody LoginDTO loginDTO){
 
-        log.debug("Attempting to grant token to {}", loginDTO.getUsername());
+        log.debug("Attempting to grant token to {}", loginDTO.getEmail());
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginDTO.getUsername(),
-                        loginDTO.getPassword()
-                )
-        );
+        User foundUser = userService.findByEmail(loginDTO.getEmail());
+        Authentication auth = new UsernamePasswordAuthenticationToken(foundUser,loginDTO);
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        SecurityContextHolder.getContext().setAuthentication(auth);
 
-        User user = (User) authentication.getPrincipal();
+        User user = (User) auth.getPrincipal();
 
         String accessToken = jwtGenerator.generate(user);
 
-        log.debug("Successfully granted token to {}", loginDTO.getUsername());
+        log.debug("Successfully granted token to {}", loginDTO.getEmail());
 
         return ResponseEntity.ok(generateAuthenticationResponseDTO(accessToken));
     }
 
     @GetMapping("/principal")
     public ResponseEntity<UserDTO> currentUser() {
-        User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Authentication auth = (Authentication) SecurityContextHolder.getContext().getAuthentication();
+        User user = (User)auth.getPrincipal();
         log.debug("Querying details of the current principal for user: {}", user);
 
         UserDTO response = new UserDTO(
