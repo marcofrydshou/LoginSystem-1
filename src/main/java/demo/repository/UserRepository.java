@@ -1,5 +1,6 @@
 package demo.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,11 +15,32 @@ import demo.model.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
 	/**
-	 * Find the user by name
-	 * @param username
-	 * @return the user
+	 * Find a enabled user by user id
+	 * @param userId a unik user id
+	 * @return A container object of user
 	 */
-	Optional<User> findByUsername(String username);
+	Optional<User> findByIdAndEnabledIsTrue(long userId);
 
-	Optional<User> findByEmail(String email);
+	/**
+	 * Find a exists user with given username
+	 * @param username
+	 * @return  a user with the given username
+	 */
+	Optional<User> findByUsernameAndEnabledIsTrue(String username);
+
+	/**
+	 * Find a enabled user with given email
+	 *
+	 * @param email user's email
+	 * @return a user with the given email
+	 */
+	Optional<User> findByEmailIgnoreCase(String email);
+
+	/**
+	 * Find all enabled users
+	 *
+	 * @return a list of exists users
+	 */
+	List<User> findUsersByEnabledIsTrue();
+
 }
