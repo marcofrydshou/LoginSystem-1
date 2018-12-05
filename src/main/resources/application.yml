@@ -1,9 +1,21 @@
-management:
-secutiry:
-  enabled: true
-
-
 spring:
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+      show-sql: false
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+        temp:
+          use_jdbc_metadata_defaults: false
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://104.248.246.50:5432/login
+    username: postgres
+    password: postgres
+
   resources:
     chain:
       enabled: true
@@ -20,9 +32,23 @@ spring:
           starttls:
             enable: true
           auth: true
+server:
+  port: 8462
 
 app:
   url:
-    passwordReset: http://localhost:8888/api/password/reset/
+    passwordReset: http://localhost:8462/api/password/reset/
   cron:
-    passwordResetCleanup: 0 0/1 * * * ?
+    passwordResetCleanup: 0 0/30 * * * ?
+    auditCleanup: 0 0 1 * * MON
+  jwt:
+    secret: test
+
+management:
+secutiry:
+  enabled: true
+
+
+
+
+
