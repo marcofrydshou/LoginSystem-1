@@ -7,9 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,17 +16,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import lombok.extern.slf4j.Slf4j;
 
-import demo.security.JwtAuthenticationEntryPoint;
-import demo.security.JwtAuthenticationProvider;
-import demo.security.JwtAuthenticationTokenFilter;
-import demo.security.JwtSuccessHandler;
+import demo.config.security.JwtAuthenticationEntryPoint;
+import demo.config.security.JwtAuthenticationProvider;
+import demo.config.security.JwtAuthenticationTokenFilter;
+import demo.config.security.JwtSuccessHandler;
 
 /**
  * Configuration of JWT Security
  */
 @Slf4j
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-@EnableWebSecurity
 @Configuration
 public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -37,13 +33,12 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 	private static final String ROLE_LIST_PATH = "/api/authentication/roles";
 	private static final String USER_ADMINISTRATION_PATH = "/api/user/**";
 	private static final String USER_LIST_PATH = "/api/user/all";
-	private static final String PASSWORD_RESET_REQUEST_PATH = "/api/password/**";
+	private static final String PASSWORD_RESET_REQUEST_PATH = "/api/password/update";
 
 	private static final String ADMIN = "ADMIN";
 	private static final String SUPERUSER = "SUPERUSER";
 	private static final String CHANGE_PASSWORD_PRIVILEGE = "CHANGE_PASSWORD_PRIVILEGE";
 
-	// Declare AuthenticationProvider
 	@Autowired
 	private JwtAuthenticationProvider authenticationProvider;
 	@Autowired
@@ -72,8 +67,6 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		// spring security can control when session will create "stateless" means no session will be created or used
-		// antMatchers states that this HttpSecurity will only be aplicate to URLSs that start with /rest/
 		http
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()

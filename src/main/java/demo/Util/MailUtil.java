@@ -19,14 +19,18 @@ public class MailUtil {
     }
 
     public void sendPasswordResetEmail(String email, String messageTemplate) throws MessagingException {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message);
 
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
+            helper.setTo(email);
+            helper.setSubject("Password Reset");
+            message.setContent(messageTemplate, "text/html; charset=utf-8");
 
-        helper.setTo(email);
-        helper.setSubject("Password Reset");
-        message.setContent(messageTemplate, "text/html; charset=utf-8");
-
-        mailSender.send(message);
+            mailSender.send(message);
+        }
+        catch (MessagingException e){
+            throw new MessagingException("Could not send to the user with given user information {}" + email);
+        }
     }
 }

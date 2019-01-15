@@ -19,6 +19,6 @@ import java.lang.annotation.Target;
 @Profile("test")
 @EnableTransactionManagement
 @ComponentScan(basePackages = {"demo"})
-@EnableJpaRepositories(basePackages = {"demo.repository", "demo.model"})
+@EnableJpaRepositories(basePackages = {"demo.data.repository", "demo.data.model"})
 public @interface TestApplicationConfig {
 }

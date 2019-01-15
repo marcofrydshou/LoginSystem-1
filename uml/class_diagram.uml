@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="1973.6384103865616" y="500.0">demo.config.security.JwtAuthenticationTokenFilter</node>
+    <node x="2069.059735686848" y="580.0">demo.config.JwtSecurityConfig</node>
+    <node x="670.5" y="350.0">demo.data.repository.UserRepository</node>
+    <node x="1804.6384103865616" y="500.0">demo.exposed.controller.TokenController</node>
+    <node x="2224.6384103865616" y="500.0">demo.exposed.controller.AuthentationController</node>
+    <node x="508.5" y="350.0">demo.data.repository.RoleRepository</node>
+    <node x="1488.1696603865616" y="350.0">demo.business.PasswordResetService</node>
+    <node x="1554.6800770532282" y="500.0">demo.exposed.controller.PasswordResetController</node>
+    <node x="1576.6696603865616" y="0.0">demo.data.model.Role</node>
+    <node x="836.5" y="350.0">demo.Util.MailUtil</node>
+    <node x="1349.6696603865616" y="500.0">demo.exposed.controller.UserController</node>
+    <node x="2425.6430690201814" y="350.0">demo.config.security.JwtValidator</node>
+    <node x="1885.5731460734096" y="350.0">demo.config.security.JwtGenerator</node>
+    <node x="426.8633071154195" y="500.0">demo.business.impl.UserServiceImpl</node>
+    <node x="951.5" y="350.0">demo.data.repository.PasswordTokenRepository</node>
+    <node x="1594.9196603865616" y="90.0">demo.data.model.User</node>
+    <node x="2460.9898127400766" y="500.0">demo.config.security.JwtAuthenticationProvider</node>
+    <node x="9.0" y="531.0">demo.Application</node>
+    <node x="1075.1696603865616" y="250.0">demo.data.model.PasswordResetToken</node>
+    <node x="1278.1696603865616" y="350.0">demo.exposed.exception.BusinessException</node>
+    <node x="2694.9898127400766" y="500.0">demo.config.security.JwtSuccessHandler</node>
+    <node x="1697.1696603865616" y="250.0">demo.business.UserService</node>
+    <node x="873.8097356868481" y="500.0">demo.business.impl.PasswordResetServiceImpl</node>
+    <node x="625.8097356868481" y="500.0">demo.config.security.JwtAuthenticationEntryPoint</node>
+    <node x="10.5" y="350.0">demo.exposed.exception.DataIntegrityViolationException</node>
+    <node x="2046.4898127400763" y="350.0">demo.data.model.JwtAuthenticationToken</node>
+    <node x="275.5" y="350.0">demo.exposed.exception.NoRolesFoundException</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="demo.business.impl.PasswordResetServiceImpl" target="demo.Util.MailUtil">
+      <point x="-22.821428571428555" y="-15.0" />
+      <point x="957.4883071154195" y="410.0" />
+      <point x="860.25" y="410.0" />
+      <point x="-23.75" y="15.0" />
+    </edge>
+    <edge source="demo.config.security.JwtValidator" target="demo.data.model.User">
+      <point x="42.33333333333337" y="-15.0" />
+      <point x="2531.4764023535145" y="330.0" />
+      <point x="2529.448624575737" y="330.0" />
+      <point x="2529.448624575737" y="160.0" />
+      <point x="1662.9474381643395" y="160.0" />
+      <point x="28.52777777777783" y="15.0" />
+    </edge>
+    <edge source="demo.exposed.controller.PasswordResetController" target="demo.business.UserService">
+      <point x="85.41666666666674" y="-15.0" />
+      <point x="1742.5967437198951" y="480.0" />
+      <point x="1764.1696603865616" y="480.0" />
+      <point x="1764.1696603865616" y="330.0" />
+      <point x="1766.3571603865616" y="330.0" />
+      <point x="7.6875" y="15.0" />
+    </edge>
+    <edge source="demo.business.impl.UserServiceImpl" target="demo.data.model.User">
+      <point x="-26.909090909090878" y="-15.0" />
+      <point x="473.9542162063286" y="450.0" />
+      <point x="265.0" y="450.0" />
+      <point x="265.0" y="150.0" />
+      <point x="1597.114104831006" y="150.0" />
+      <point x="-37.30555555555566" y="15.0" />
+    </edge>
+    <edge source="demo.config.security.JwtAuthenticationProvider" target="demo.data.model.User">
+      <point x="80.25" y="-15.0" />
+      <point x="2648.2398127400766" y="480.0" />
+      <point x="2616.0731460734096" y="480.0" />
+      <point x="2616.0731460734096" y="140.0" />
+      <point x="1671.725215942117" y="140.0" />
+      <point x="37.30555555555543" y="15.0" />
+    </edge>
+    <edge source="demo.config.JwtSecurityConfig" target="demo.config.security.JwtAuthenticationTokenFilter">
+      <point x="-32.59999999999991" y="-15.0" />
+      <point x="2117.959735686848" y="550.0" />
+      <point x="2031.3884103865616" y="550.0" />
+      <point x="-57.75" y="15.0" />
+    </edge>
+    <edge source="demo.exposed.controller.TokenController" target="demo.data.model.User">
+      <point x="-49.66666666666674" y="-15.0" />
+      <point x="1829.471743719895" y="480.0" />
+      <point x="1848.7634103865616" y="480.0" />
+      <point x="1848.7634103865616" y="200.0" />
+      <point x="1645.3918826087838" y="200.0" />
+      <point x="10.972222222222172" y="15.0" />
+    </edge>
+    <edge source="demo.exposed.controller.AuthentationController" target="demo.data.model.Role">
+      <point x="36.0" y="-15.0" />
+      <point x="2356.6384103865616" y="460.0" />
+      <point x="2380.184735686848" y="460.0" />
+      <point x="2380.184735686848" y="50.0" />
+      <point x="1647.24108895799" y="50.0" />
+      <point x="32.57142857142844" y="15.0" />
+    </edge>
+    <edge source="demo.data.repository.PasswordTokenRepository" target="demo.data.model.User">
+      <point x="-53.5" y="-15.0" />
+      <point x="1005.0" y="180.0" />
+      <point x="1610.2807714976727" y="180.0" />
+      <point x="-24.138888888888914" y="15.0" />
+    </edge>
+    <edge source="demo.config.JwtSecurityConfig" target="demo.config.security.JwtSuccessHandler">
+      <point x="65.19999999999982" y="-15.0" />
+      <point x="2215.7597356868478" y="560.0" />
+      <point x="2780.4898127400766" y="560.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="demo.config.security.JwtAuthenticationProvider" target="demo.data.model.JwtAuthenticationToken">
+      <point x="-80.25" y="-15.0" />
+      <point x="2487.7398127400766" y="450.0" />
+      <point x="2213.9898127400766" y="450.0" />
+      <point x="67.0" y="15.0" />
+    </edge>
+    <edge source="demo.business.impl.PasswordResetServiceImpl" target="demo.data.model.User">
+      <point x="68.46428571428578" y="-15.0" />
+      <point x="1048.7740214011337" y="460.0" />
+      <point x="1267.6696603865616" y="460.0" />
+      <point x="1267.6696603865616" y="210.0" />
+      <point x="1623.4474381643395" y="210.0" />
+      <point x="-10.972222222222172" y="15.0" />
+    </edge>
+    <edge source="demo.business.impl.UserServiceImpl" target="demo.exposed.exception.NoRolesFoundException">
+      <point x="-13.454545454545439" y="-15.0" />
+      <point x="487.408761660874" y="440.0" />
+      <point x="376.0" y="440.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="demo.business.PasswordResetService" target="demo.data.model.User">
+      <point x="0.0" y="-15.0" />
+      <point x="1582.1696603865616" y="230.0" />
+      <point x="1632.2252159421173" y="230.0" />
+      <point x="-2.1944444444443434" y="15.0" />
+    </edge>
+    <edge source="demo.exposed.controller.AuthentationController" target="demo.data.model.User">
+      <point x="12.0" y="-15.0" />
+      <point x="2332.6384103865616" y="480.0" />
+      <point x="2343.9898127400766" y="480.0" />
+      <point x="2343.9898127400766" y="180.0" />
+      <point x="1654.1696603865616" y="180.0" />
+      <point x="19.75" y="15.0" />
+    </edge>
+    <edge source="demo.exposed.controller.UserController" target="demo.business.UserService">
+      <point x="17.5" y="-15.0" />
+      <point x="1437.1696603865616" y="470.0" />
+      <point x="1466.6696603865616" y="470.0" />
+      <point x="1466.6696603865616" y="320.0" />
+      <point x="1720.2321603865616" y="320.0" />
+      <point x="-38.4375" y="15.0" />
+    </edge>
+    <edge source="demo.exposed.controller.AuthentationController" target="demo.config.security.JwtGenerator">
+      <point x="-84.0" y="-15.0" />
+      <point x="2236.6384103865616" y="470.0" />
+      <point x="1969.3231460734096" y="470.0" />
+      <point x="16.75" y="15.0" />
+    </edge>
+    <edge source="demo.business.impl.PasswordResetServiceImpl" target="demo.business.PasswordResetService">
+      <point x="98.89285714285711" y="-15.0" />
+      <point x="1079.2025928297053" y="480.0" />
+      <point x="1519.502993719895" y="480.0" />
+      <point x="-62.66666666666674" y="15.0" />
+    </edge>
+    <edge source="demo.data.repository.RoleRepository" target="demo.data.model.Role">
+      <point x="0.0" y="-15.0" />
+      <point x="579.5" y="60.0" />
+      <point x="1592.9553746722759" y="60.0" />
+      <point x="-21.71428571428578" y="15.0" />
+    </edge>
+    <edge source="demo.business.impl.UserServiceImpl" target="demo.data.model.Role">
+      <point x="-67.27272727272725" y="-15.0" />
+      <point x="433.59057984269225" y="480.0" />
+      <point x="0.0" y="480.0" />
+      <point x="0.0" y="50.0" />
+      <point x="1582.098231815133" y="50.0" />
+      <point x="-32.57142857142867" y="15.0" />
+    </edge>
+    <edge source="demo.exposed.controller.UserController" target="demo.exposed.exception.BusinessException">
+      <point x="-52.5" y="-15.0" />
+      <point x="1367.1696603865616" y="470.0" />
+      <point x="1361.6696603865616" y="470.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="demo.business.impl.PasswordResetServiceImpl" target="demo.exposed.exception.BusinessException">
+      <point x="83.67857142857133" y="-15.0" />
+      <point x="1063.9883071154195" y="470.0" />
+      <point x="1306.002993719895" y="470.0" />
+      <point x="-55.66666666666674" y="15.0" />
+    </edge>
+    <edge source="demo.exposed.controller.TokenController" target="demo.config.security.JwtGenerator">
+      <point x="49.66666666666674" y="-15.0" />
+      <point x="1928.8050770532284" y="480.0" />
+      <point x="1935.8231460734096" y="480.0" />
+      <point x="-16.75" y="15.0" />
+    </edge>
+    <edge source="demo.business.impl.PasswordResetServiceImpl" target="demo.data.repository.UserRepository">
+      <point x="-68.46428571428578" y="-15.0" />
+      <point x="911.8454499725623" y="440.0" />
+      <point x="761.125" y="440.0" />
+      <point x="18.125" y="15.0" />
+    </edge>
+    <edge source="demo.business.impl.PasswordResetServiceImpl" target="demo.data.repository.RoleRepository">
+      <point x="-83.67857142857144" y="-15.0" />
+      <point x="896.6311642582766" y="450.0" />
+      <point x="632.75" y="450.0" />
+      <point x="53.25" y="15.0" />
+    </edge>
+    <edge source="demo.business.UserService" target="demo.data.model.Role">
+      <point x="30.75" y="-15.0" />
+      <point x="1789.4196603865616" y="230.0" />
+      <point x="1822.019841269841" y="230.0" />
+      <point x="1822.019841269841" y="60.0" />
+      <point x="1636.3839461008474" y="60.0" />
+      <point x="21.71428571428578" y="15.0" />
+    </edge>
+    <edge source="demo.data.model.User" target="demo.data.model.Role">
+      <point x="19.75" y="-15.0" />
+      <point x="1654.1696603865616" y="70.0" />
+      <point x="1625.5268032437045" y="70.0" />
+      <point x="10.85714285714289" y="15.0" />
+    </edge>
+    <edge source="demo.config.security.JwtAuthenticationProvider" target="demo.config.security.JwtValidator">
+      <point x="-26.75" y="-15.0" />
+      <point x="2541.2398127400766" y="480.0" />
+      <point x="2531.4764023535145" y="480.0" />
+      <point x="42.333333333333485" y="15.0" />
+    </edge>
+    <edge source="demo.config.security.JwtAuthenticationTokenFilter" target="demo.data.model.JwtAuthenticationToken">
+      <point x="57.75" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="demo.business.impl.PasswordResetServiceImpl" target="demo.data.model.Role">
+      <point x="-38.03571428571422" y="-15.0" />
+      <point x="942.2740214011338" y="420.0" />
+      <point x="826.0" y="420.0" />
+      <point x="826.0" y="70.0" />
+      <point x="1603.8125175294188" y="70.0" />
+      <point x="-10.85714285714289" y="15.0" />
+    </edge>
+    <edge source="demo.business.impl.PasswordResetServiceImpl" target="demo.data.model.PasswordResetToken">
+      <point x="38.03571428571422" y="-15.0" />
+      <point x="1018.3454499725623" y="440.0" />
+      <point x="1176.0" y="440.0" />
+      <point x="1176.0" y="300.0" />
+      <point x="1166.1696603865616" y="300.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="demo.config.security.JwtValidator" target="demo.business.UserService">
+      <point x="-42.333333333333485" y="-15.0" />
+      <point x="2446.809735686848" y="310.0" />
+      <point x="1812.4821603865616" y="310.0" />
+      <point x="53.8125" y="15.0" />
+    </edge>
+    <edge source="demo.config.JwtSecurityConfig" target="demo.config.security.JwtAuthenticationProvider">
+      <point x="32.59999999999991" y="-15.0" />
+      <point x="2183.159735686848" y="550.0" />
+      <point x="2567.9898127400766" y="550.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="demo.business.impl.PasswordResetServiceImpl" target="demo.data.repository.PasswordTokenRepository">
+      <point x="22.821428571428555" y="-15.0" />
+      <point x="1003.1311642582766" y="430.0" />
+      <point x="1112.0" y="430.0" />
+      <point x="53.5" y="15.0" />
+    </edge>
+    <edge source="demo.business.UserService" target="demo.data.model.User">
+      <point x="-30.75" y="-15.0" />
+      <point x="1727.9196603865616" y="210.0" />
+      <point x="1641.002993719895" y="210.0" />
+      <point x="6.5833333333332575" y="15.0" />
+    </edge>
+    <edge source="demo.config.security.JwtGenerator" target="demo.data.model.User">
+      <point x="0.0" y="-15.0" />
+      <point x="1952.5731460734096" y="190.0" />
+      <point x="1649.7807714976727" y="190.0" />
+      <point x="15.361111111111086" y="15.0" />
+    </edge>
+    <edge source="demo.business.impl.UserServiceImpl" target="demo.exposed.exception.DataIntegrityViolationException">
+      <point x="-40.363636363636374" y="-15.0" />
+      <point x="460.4996707517831" y="460.0" />
+      <point x="193.5" y="460.0" />
+      <point x="61.0" y="15.0" />
+    </edge>
+    <edge source="demo.business.impl.UserServiceImpl" target="demo.business.UserService">
+      <point x="13.454545454545496" y="-15.0" />
+      <point x="514.317852569965" y="420.0" />
+      <point x="498.0" y="420.0" />
+      <point x="498.0" y="310.0" />
+      <point x="1704.8571603865616" y="310.0" />
+      <point x="-53.8125" y="15.0" />
+    </edge>
+    <edge source="demo.data.repository.PasswordTokenRepository" target="demo.data.model.PasswordResetToken">
+      <point x="53.5" y="-15.0" />
+      <point x="1112.0" y="300.0" />
+      <point x="1105.5029937198951" y="300.0" />
+      <point x="-60.66666666666663" y="15.0" />
+    </edge>
+    <edge source="demo.data.repository.UserRepository" target="demo.data.model.User">
+      <point x="0.0" y="-15.0" />
+      <point x="743.0" y="170.0" />
+      <point x="1605.8918826087838" y="170.0" />
+      <point x="-28.52777777777783" y="15.0" />
+    </edge>
+    <edge source="demo.exposed.controller.PasswordResetController" target="demo.data.model.User">
+      <point x="17.083333333333258" y="-15.0" />
+      <point x="1674.2634103865616" y="480.0" />
+      <point x="1686.6696603865616" y="480.0" />
+      <point x="1686.6696603865616" y="220.0" />
+      <point x="1636.614104831006" y="220.0" />
+      <point x="2.1944444444443434" y="15.0" />
+    </edge>
+    <edge source="demo.exposed.controller.PasswordResetController" target="demo.business.PasswordResetService">
+      <point x="-17.083333333333258" y="-15.0" />
+      <point x="1640.0967437198951" y="480.0" />
+      <point x="1644.8363270532284" y="480.0" />
+      <point x="62.66666666666674" y="15.0" />
+    </edge>
+    <edge source="demo.data.model.PasswordResetToken" target="demo.data.model.User">
+      <point x="45.500000000000114" y="-15.0" />
+      <point x="1211.6696603865616" y="200.0" />
+      <point x="1619.0585492754506" y="200.0" />
+      <point x="-15.361111111111086" y="15.0" />
+    </edge>
+    <edge source="demo.business.impl.UserServiceImpl" target="demo.data.repository.RoleRepository">
+      <point x="40.363636363636374" y="-15.0" />
+      <point x="541.2269434790559" y="460.0" />
+      <point x="561.75" y="460.0" />
+      <point x="-17.75" y="15.0" />
+    </edge>
+    <edge source="demo.config.JwtSecurityConfig" target="demo.config.security.JwtAuthenticationEntryPoint">
+      <point x="-65.19999999999982" y="-15.0" />
+      <point x="2085.359735686848" y="560.0" />
+      <point x="739.8097356868481" y="560.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="demo.exposed.controller.AuthentationController" target="demo.business.UserService">
+      <point x="-36.0" y="-15.0" />
+      <point x="2284.6384103865616" y="480.0" />
+      <point x="2277.8648127400766" y="480.0" />
+      <point x="2277.8648127400766" y="330.0" />
+      <point x="1781.7321603865616" y="330.0" />
+      <point x="23.0625" y="15.0" />
+    </edge>
+    <edge source="demo.exposed.controller.UserController" target="demo.data.model.User">
+      <point x="-17.5" y="-15.0" />
+      <point x="1402.1696603865616" y="460.0" />
+      <point x="1455.6696603865616" y="460.0" />
+      <point x="1455.6696603865616" y="220.0" />
+      <point x="1627.8363270532284" y="220.0" />
+      <point x="-6.5833333333332575" y="15.0" />
+    </edge>
+    <edge source="demo.business.impl.UserServiceImpl" target="demo.data.repository.UserRepository">
+      <point x="67.27272727272725" y="-15.0" />
+      <point x="568.1360343881468" y="480.0" />
+      <point x="724.875" y="480.0" />
+      <point x="-18.125" y="15.0" />
+    </edge>
+    <edge source="demo.exposed.controller.AuthentationController" target="demo.config.security.JwtValidator">
+      <point x="60.0" y="-15.0" />
+      <point x="2380.6384103865616" y="470.0" />
+      <point x="2446.809735686848" y="470.0" />
+      <point x="-42.333333333333485" y="15.0" />
+    </edge>
+    <edge source="demo.exposed.controller.PasswordResetController" target="demo.exposed.exception.BusinessException">
+      <point x="-85.41666666666674" y="-15.0" />
+      <point x="1571.7634103865616" y="450.0" />
+      <point x="1417.3363270532284" y="450.0" />
+      <point x="55.66666666666674" y="15.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="599.0" y="461.0" />
+  <SelectedNodes>
+    <node>demo.Application</node>
+  </SelectedNodes>
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
